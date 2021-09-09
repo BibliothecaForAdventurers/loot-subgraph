@@ -1,0 +1,78 @@
+type _Schema_
+  @fulltext(
+    name: "search"
+    language: en
+    algorithm: rank
+    include: [
+      {
+        entity: "Bag"
+        fields: [
+          { name: "chest" }
+          { name: "foot" }
+          { name: "hand" }
+          { name: "head" }
+          { name: "neck" }
+          { name: "ring" }
+          { name: "waist" }
+          { name: "weapon" }
+        ]
+      }
+    ]
+  )
+
+type Bag @entity {
+  id: ID!
+  chest: String!
+  foot: String!
+  hand: String!
+  head: String!
+  neck: String!
+  ring: String!
+  waist: String!
+  weapon: String!
+  currentOwner: Wallet!
+  minted: BigInt!
+}
+type Realm @entity {
+  id: ID!
+  tokenURI: String!
+  currentOwner: Wallet!
+  minted: BigInt!
+}
+
+type Treasure @entity {
+  id: ID!
+  asset1: String!
+  asset2: String!
+  asset3: String!
+  asset4: String!
+  asset5: String!
+  asset6: String!
+  asset7: String!
+  asset8: String!
+  currentOwner: Wallet!
+  minted: BigInt!
+}
+
+type Wallet @entity {
+  id: ID!
+  address: Bytes!
+  bags: [Bag!] @derivedFrom(field: "currentOwner")
+  bagsHeld: BigInt
+  realms: [Realm!] @derivedFrom(field: "currentOwner")
+  realmsHeld: BigInt
+  treasures: [Treasure!] @derivedFrom(field: "currentOwner")
+  treasuresHeld: BigInt
+  joined: BigInt!
+}
+
+type Transfer @entity {
+  id: ID!
+  bag: Bag
+  realm: Realm
+  treasure: Treasure
+  from: Wallet!
+  to: Wallet!
+  txHash: Bytes!
+  timestamp: BigInt!
+}
