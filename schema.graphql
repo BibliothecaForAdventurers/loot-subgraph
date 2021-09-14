@@ -33,6 +33,19 @@ type Bag @entity {
   currentOwner: Wallet!
   minted: BigInt!
 }
+type MLoot @entity {
+  id: ID!
+  chest: String!
+  foot: String!
+  hand: String!
+  head: String!
+  neck: String!
+  ring: String!
+  waist: String!
+  weapon: String!
+  currentOwner: Wallet!
+  minted: BigInt!
+}
 type Realm @entity {
   id: ID!
   tokenURI: String!
@@ -59,6 +72,8 @@ type Wallet @entity {
   address: Bytes!
   bags: [Bag!] @derivedFrom(field: "currentOwner")
   bagsHeld: BigInt
+  mLoot: [MLoot!] @derivedFrom(field: "currentOwner")
+  mLootHeld: BigInt
   realms: [Realm!] @derivedFrom(field: "currentOwner")
   realmsHeld: BigInt
   treasures: [Treasure!] @derivedFrom(field: "currentOwner")
@@ -69,6 +84,7 @@ type Wallet @entity {
 type Transfer @entity {
   id: ID!
   bag: Bag
+  mLoot: MLoot
   realm: Realm
   treasure: Treasure
   from: Wallet!

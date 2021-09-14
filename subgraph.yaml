@@ -22,8 +22,30 @@ dataSources:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
       file: ./src/mapping.ts
+
   - kind: ethereum/contract
-    name: Realms (for Adventurers)
+    name: LootMore
+    network: mainnet
+    source:
+      address: '0x1dfe7Ca09e99d10835Bf73044a23B73Fc20623DF'
+      abi: LootMore
+      startBlock: 13160010
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+      abis:
+        - name: LootMore
+          file: ./abis/LootMore.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleMLootTransfer
+      file: ./src/mapping.ts     
+
+  - kind: ethereum/contract
+    name: LootRealm
     network: mainnet
     source:
       address: '0x7afe30cb3e53dba6801aa0ea647a0ecea7cbe18d'
@@ -42,6 +64,7 @@ dataSources:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleRealmTransfer
       file: ./src/mapping.ts
+
   - kind: ethereum/contract
     name: LootTreasure
     network: mainnet
