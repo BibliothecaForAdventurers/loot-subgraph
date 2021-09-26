@@ -48,7 +48,7 @@ type MLoot @entity {
 }
 type Realm @entity {
   id: ID!
-  tokenURI: String!
+  tokenURI: String
   currentOwner: Wallet!
   minted: BigInt!
 }
