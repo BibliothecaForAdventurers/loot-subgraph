@@ -30,6 +30,29 @@ type Bag @entity {
   ring: String!
   waist: String!
   weapon: String!
+  chestSuffixId: Int!
+  footSuffixId: Int!
+  handSuffixId: Int!
+  headSuffixId: Int!
+  neckSuffixId: Int!
+  ringSuffixId: Int!
+  waistSuffixId: Int!
+  weaponSuffixId: Int!
+  currentOwner: Wallet!
+  minted: BigInt!
+  manas: [Mana!]! @derivedFrom(field: "lootTokenId")
+  manasClaimed: BigInt!
+}
+type MLoot @entity {
+  id: ID!
+  chest: String!
+  foot: String!
+  hand: String!
+  head: String!
+  neck: String!
+  ring: String!
+  waist: String!
+  weapon: String!
   currentOwner: Wallet!
   minted: BigInt!
 }
@@ -54,15 +77,30 @@ type Treasure @entity {
   minted: BigInt!
 }
 
+type Mana @entity {
+  id: ID!
+  lootTokenId: Bag!
+  itemName: String!
+  suffixId: Int!
+  inventoryId: Int!
+  currentOwner: Wallet!
+  minted: BigInt!
+}
+
+
 type Wallet @entity {
   id: ID!
   address: Bytes!
   bags: [Bag!] @derivedFrom(field: "currentOwner")
   bagsHeld: BigInt
+  mLoot: [MLoot!] @derivedFrom(field: "currentOwner")
+  mLootHeld: BigInt
   realms: [Realm!] @derivedFrom(field: "currentOwner")
   realmsHeld: BigInt
   treasures: [Treasure!] @derivedFrom(field: "currentOwner")
   treasuresHeld: BigInt
+  manas: [Mana!] @derivedFrom(field: "currentOwner")
+  manasHeld: BigInt
   joined: BigInt!
 }
 
@@ -70,7 +108,9 @@ type Transfer @entity {
   id: ID!
   bag: Bag
   realm: Realm
+  mLoot: MLoot
   treasure: Treasure
+  mana: Mana
   from: Wallet!
   to: Wallet!
   txHash: Bytes!
