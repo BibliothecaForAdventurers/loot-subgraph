@@ -117,3 +117,27 @@ dataSources:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
       file: ./src/mana-mapping.ts
+
+  - kind: ethereum/contract
+    name: GenesisProjectAdventurer
+    network: mainnet
+    source:
+      address: '0x8db687aceb92c66f013e1d614137238cc698fedb'
+      abi: GenesisAdventurer
+      startBlock: 13235759
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+        - GAdventurer
+        - Wallet
+        - Bag
+      abis:
+        - name: GenesisAdventurer
+          file: ./abis/GenesisAdventurer.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/gadventurer-mapping.ts
