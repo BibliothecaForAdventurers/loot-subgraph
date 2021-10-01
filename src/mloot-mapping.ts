@@ -1,46 +1,26 @@
-import { MLoot, Transfer, Wallet} from '../generated/schema';
+import { MLoot } from '../generated/schema';
 import { Transfer as TransferEvent } from '../generated/LootMore/LootMore';
 import { LootMore } from '../generated/LootMore/LootMore';
-import { isZeroAddress } from './utils';
+import { getTransfer, getWallets, isZeroAddress } from './utils';
 
 import { BigInt } from '@graphprotocol/graph-ts';
 
 export function handleTransfer(event: TransferEvent): void {
-    let fromAddress = event.params.from;
-    let toAddress = event.params.to;
-    let tokenId = event.params.tokenId;
-    let fromId = fromAddress.toHex();
-    let fromWallet = Wallet.load(fromId);
-  
-    if (!fromWallet) {
-      fromWallet = new Wallet(fromId);
-      fromWallet.address = fromAddress;
-      fromWallet.joined = event.block.timestamp;
-      fromWallet.mLootHeld = BigInt.fromI32(0);
-      fromWallet.save();
-    } else {
-      if (!isZeroAddress(fromId)) {
-        fromWallet.mLootHeld = fromWallet.mLootHeld.minus(BigInt.fromI32(1));
-        fromWallet.save();
-      }
-    }
-  
-    let toId = toAddress.toHex();
-    let toWallet = Wallet.load(toId);
-    if (!toWallet) {
-      toWallet = new Wallet(toId);
-      toWallet.address = toAddress;
-      toWallet.joined = event.block.timestamp;
-      toWallet.mLootHeld = BigInt.fromI32(1);
-      toWallet.save();
-    } else {
-      toWallet.mLootHeld = toWallet.mLootHeld.plus(BigInt.fromI32(1));
-      toWallet.save();
-    }
-  
-    let mLoot = MLoot.load(tokenId.toString());
+  let tokenId = event.params.tokenId;
+  let wallets = getWallets(event.params.from, event.params.to, event);
+
+
+  if(!isZeroAddress(wallets.fromWallet.id)) {
+    wallets.fromWallet.mLootsHeld = wallets.fromWallet.mLootsHeld.minus(BigInt.fromI32(1))
+  }
+  wallets.fromWallet.save()
+
+  wallets.toWallet.mLootsHeld = wallets.toWallet.mLootsHeld.plus(BigInt.fromI32(1))
+  wallets.toWallet.save()
+
+  let mLoot = MLoot.load(tokenId.toString());
     if (mLoot != null) {
-      mLoot.currentOwner = toWallet.id;
+      mLoot.currentOwner = wallets.toWallet.id;
       mLoot.save();
     } else {
       mLoot = new MLoot(tokenId.toString());
@@ -53,19 +33,12 @@ export function handleTransfer(event: TransferEvent): void {
       mLoot.ring = contract.getRing(tokenId);
       mLoot.waist = contract.getWaist(tokenId);
       mLoot.weapon = contract.getWeapon(tokenId);
-      mLoot.currentOwner = toWallet.id;
+      mLoot.currentOwner = wallets.toWallet.id;
       mLoot.minted = event.block.timestamp;
       mLoot.save();
     }
   
-    let transfer = new Transfer(
-      event.transaction.hash.toHex() + '-' + event.logIndex.toString()
-    );
-  
+    let transfer = getTransfer(event, wallets)  
     transfer.mLoot = tokenId.toString();
-    transfer.from = fromWallet.id;
-    transfer.to = toWallet.id;
-    transfer.txHash = event.transaction.hash;
-    transfer.timestamp = event.block.timestamp;
     transfer.save();
   }

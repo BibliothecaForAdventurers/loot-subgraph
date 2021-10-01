@@ -110,17 +110,17 @@ type Wallet @entity {
   id: ID!
   address: Bytes!
   bags: [Bag!] @derivedFrom(field: "currentOwner")
-  bagsHeld: BigInt
+  bagsHeld: BigInt!
   mLoot: [MLoot!] @derivedFrom(field: "currentOwner")
-  mLootHeld: BigInt
+  mLootsHeld: BigInt!
   realms: [Realm!] @derivedFrom(field: "currentOwner")
-  realmsHeld: BigInt
+  realmsHeld: BigInt!
   treasures: [Treasure!] @derivedFrom(field: "currentOwner")
-  treasuresHeld: BigInt
+  treasuresHeld: BigInt!
   manas: [Mana!] @derivedFrom(field: "currentOwner")
-  manasHeld: BigInt
+  manasHeld: BigInt!
   gAdventurers: [GAdventurer!] @derivedFrom(field: "currentOwner")
-  gAdventurersHeld: BigInt
+  gAdventurersHeld: BigInt!
   joined: BigInt!
 }
 

@@ -1,49 +1,29 @@
 import { Transfer as TransferEvent } from '../generated/GenesisProjectMana/GenesisMana';
 
-import { isZeroAddress } from './utils';
+import { getTransfer, getWallets, isZeroAddress } from './utils';
 
-import { Bag, Transfer, Wallet, Mana } from '../generated/schema';
+import { Bag, Mana } from '../generated/schema';
 import { GenesisMana } from '../generated/GenesisProjectMana/GenesisMana';
 
 import { BigInt } from '@graphprotocol/graph-ts';
 
 export function handleTransfer(event: TransferEvent): void {
-    let fromAddress = event.params.from;
-    let toAddress = event.params.to;
-    let tokenId = event.params.tokenId;
-    let fromId = fromAddress.toHex();
-    let fromWallet = Wallet.load(fromId);
-    let lootTokenId = "";
+  let tokenId = event.params.tokenId;
+  let wallets = getWallets(event.params.from, event.params.to, event);
+
+
+  if(!isZeroAddress(wallets.fromWallet.id)) {
+    wallets.fromWallet.manasHeld = wallets.fromWallet.manasHeld.minus(BigInt.fromI32(1))
+  }
+  wallets.fromWallet.save()
+
+  wallets.toWallet.manasHeld = wallets.toWallet.manasHeld.plus(BigInt.fromI32(1))
+  wallets.toWallet.save()
   
-    if (!fromWallet) {
-      fromWallet = new Wallet(fromId);
-      fromWallet.address = fromAddress;
-      fromWallet.joined = event.block.timestamp;
-      fromWallet.manasHeld = BigInt.fromI32(0);
-      fromWallet.save();
-    } else {
-      if (!isZeroAddress(fromId)) {
-        fromWallet.manasHeld = fromWallet.manasHeld.minus(BigInt.fromI32(1));
-        fromWallet.save();
-      }
-    }
-  
-    let toId = toAddress.toHex();
-    let toWallet = Wallet.load(toId);
-    if (!toWallet) {
-      toWallet = new Wallet(toId);
-      toWallet.address = toAddress;
-      toWallet.joined = event.block.timestamp;
-      toWallet.manasHeld = BigInt.fromI32(1);
-      toWallet.save();
-    } else {
-      toWallet.manasHeld = toWallet.manasHeld.plus(BigInt.fromI32(1));
-      toWallet.save();
-    }
-  
-    let mana = Mana.load(tokenId.toString());
+  let lootTokenId: string;
+  let mana = Mana.load(tokenId.toString());
     if (mana != null) {
-      mana.currentOwner = toWallet.id;
+      mana.currentOwner = wallets.toWallet.id;
       mana.save();
     } else {
       mana = new Mana(tokenId.toString());
@@ -55,7 +35,7 @@ export function handleTransfer(event: TransferEvent): void {
       mana.itemName = manaDetails.value1;
       mana.suffixId = manaDetails.value2;
       mana.inventoryId = manaDetails.value3;
-      mana.currentOwner = toWallet.id;
+      mana.currentOwner = wallets.toWallet.id;
       mana.minted = event.block.timestamp;
       mana.save();
     }
@@ -66,15 +46,8 @@ export function handleTransfer(event: TransferEvent): void {
       bag.save();
     }
   
-    let transfer = new Transfer(
-      event.transaction.hash.toHex() + '-' + event.logIndex.toString()
-    );
-  
+    let transfer = getTransfer(event, wallets)  
     transfer.mana = tokenId.toString();
-    transfer.from = fromWallet.id;
-    transfer.to = toWallet.id;
-    transfer.txHash = event.transaction.hash;
-    transfer.timestamp = event.block.timestamp;
-    transfer.save();
+    transfer.save()
   
   }

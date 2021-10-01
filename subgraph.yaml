@@ -11,7 +11,7 @@ dataSources:
       startBlock: 13108876
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - Transfer
@@ -26,7 +26,7 @@ dataSources:
       file: ./src/loot-mapping.ts
 
   - kind: ethereum/contract
-    name: Realms (for Adventurers)
+    name: LootRealm
     network: mainnet
     source:
       address: '0x7afe30cb3e53dba6801aa0ea647a0ecea7cbe18d'
@@ -34,7 +34,7 @@ dataSources:
       startBlock: 13134698
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - Transfer
@@ -57,7 +57,7 @@ dataSources:
       startBlock: 13160010
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - Transfer
@@ -80,7 +80,7 @@ dataSources:
       startBlock: 13144686
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - Treasure
@@ -103,7 +103,7 @@ dataSources:
       startBlock: 13186741
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - Transfer
@@ -127,7 +127,7 @@ dataSources:
       startBlock: 13235759
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - Transfer

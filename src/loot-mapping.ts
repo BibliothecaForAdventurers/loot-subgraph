@@ -1,16 +1,21 @@
 import { Transfer as TransferEvent } from '../generated/Loot/Loot';
-import { isZeroAddress } from './utils';
+import { getTransfer, getWallets, isZeroAddress } from './utils';
 
-import { Bag, Transfer, Wallet } from '../generated/schema';
+import { Bag } from '../generated/schema';
 import { Loot } from '../generated/Loot/Loot';
 import { BigInt } from '@graphprotocol/graph-ts';
 
 export function handleTransfer(event: TransferEvent): void {
-  let fromAddress = event.params.from;
-  let toAddress = event.params.to;
   let tokenId = event.params.tokenId;
-  let fromId = fromAddress.toHex();
-  let fromWallet = Wallet.load(fromId);
+  let wallets = getWallets(event.params.from, event.params.to, event);
+
+  if(!isZeroAddress(wallets.fromWallet.id)) {
+    wallets.fromWallet.bagsHeld = wallets.fromWallet.bagsHeld.minus(BigInt.fromI32(1))
+  }
+  wallets.fromWallet.save()
+
+  wallets.toWallet.bagsHeld = wallets.toWallet.bagsHeld.plus(BigInt.fromI32(1))
+  wallets.toWallet.save()
 
   let suffixArray: Array<string> = ["","Power","Giants",
     "Titans","Skill","Perfection",
@@ -19,35 +24,9 @@ export function handleTransfer(event: TransferEvent): void {
     "the Fox","Detection","Reflection",
     "the Twins"];
 
-  if (!fromWallet) {
-    fromWallet = new Wallet(fromId);
-    fromWallet.address = fromAddress;
-    fromWallet.joined = event.block.timestamp;
-    fromWallet.bagsHeld = BigInt.fromI32(0);
-    fromWallet.save();
-  } else {
-    if (!isZeroAddress(fromId)) {
-      fromWallet.bagsHeld = fromWallet.bagsHeld.minus(BigInt.fromI32(1));
-      fromWallet.save();
-    }
-  }
-
-  let toId = toAddress.toHex();
-  let toWallet = Wallet.load(toId);
-  if (!toWallet) {
-    toWallet = new Wallet(toId);
-    toWallet.address = toAddress;
-    toWallet.joined = event.block.timestamp;
-    toWallet.bagsHeld = BigInt.fromI32(1);
-    toWallet.save();
-  } else {
-    toWallet.bagsHeld = toWallet.bagsHeld.plus(BigInt.fromI32(1));
-    toWallet.save();
-  }
-
   let bag = Bag.load(tokenId.toString());
   if (bag != null) {
-    bag.currentOwner = toWallet.id;
+    bag.currentOwner = wallets.toWallet.id;
     bag.save();
   } else {
     bag = new Bag(tokenId.toString());
@@ -108,22 +87,15 @@ export function handleTransfer(event: TransferEvent): void {
       bag.weaponSuffixId = suffixArray.indexOf(item.split("of ")[1].split(" +1")[0]);
     } else
       bag.weaponSuffixId = 0;
-    bag.currentOwner = toWallet.id;
+    bag.currentOwner = wallets.toWallet.id;
     bag.minted = event.block.timestamp;
     bag.manasClaimed = BigInt.fromI32(0);
     bag.save();
   }
 
-  let transfer = new Transfer(
-    event.transaction.hash.toHex() + '-' + event.logIndex.toString()
-  );
-
+  let transfer = getTransfer(event, wallets)
   transfer.bag = tokenId.toString();
-  transfer.from = fromWallet.id;
-  transfer.to = toWallet.id;
-  transfer.txHash = event.transaction.hash;
-  transfer.timestamp = event.block.timestamp;
-  transfer.save();
+  transfer.save()
 }
 
 
