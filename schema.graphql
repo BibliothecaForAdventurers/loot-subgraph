@@ -42,6 +42,7 @@ type Bag @entity {
   minted: BigInt!
   manas: [Mana!]! @derivedFrom(field: "lootTokenId")
   manasClaimed: BigInt!
+  itemsClaimed: Boolean!
 }
 
 type GAdventurer @entity {
@@ -105,6 +106,14 @@ type Mana @entity {
   minted: BigInt!
 }
 
+type Item @entity {
+  id: ID!
+  lootTokenId: Bag!
+  itemName: String!
+  itemType: String!
+  suffix: String
+  currentOwner: Wallet!
+}
 
 type Wallet @entity {
   id: ID!
@@ -121,6 +130,8 @@ type Wallet @entity {
   manasHeld: BigInt!
   gAdventurers: [GAdventurer!] @derivedFrom(field: "currentOwner")
   gAdventurersHeld: BigInt!
+  items: [Item!] @derivedFrom(field: "currentOwner")
+  itemsHeld: BigInt!
   joined: BigInt!
 }
 
@@ -132,6 +143,7 @@ type Transfer @entity {
   treasure: Treasure
   mana: Mana
   gAdventurer: GAdventurer
+  item: [Item!]
   from: Wallet!
   to: Wallet!
   txHash: Bytes!

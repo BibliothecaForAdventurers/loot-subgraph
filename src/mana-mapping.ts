@@ -1,16 +1,13 @@
 import { Transfer as TransferEvent } from '../generated/GenesisProjectMana/GenesisMana';
-
 import { getTransfer, getWallets, isZeroAddress } from './utils';
 
 import { Bag, Mana } from '../generated/schema';
 import { GenesisMana } from '../generated/GenesisProjectMana/GenesisMana';
-
 import { BigInt } from '@graphprotocol/graph-ts';
 
 export function handleTransfer(event: TransferEvent): void {
   let tokenId = event.params.tokenId;
   let wallets = getWallets(event.params.from, event.params.to, event);
-
 
   if(!isZeroAddress(wallets.fromWallet.id)) {
     wallets.fromWallet.manasHeld = wallets.fromWallet.manasHeld.minus(BigInt.fromI32(1))
@@ -20,7 +17,7 @@ export function handleTransfer(event: TransferEvent): void {
   wallets.toWallet.manasHeld = wallets.toWallet.manasHeld.plus(BigInt.fromI32(1))
   wallets.toWallet.save()
   
-  let lootTokenId: string;
+  let lootTokenId = "";
   let mana = Mana.load(tokenId.toString());
     if (mana != null) {
       mana.currentOwner = wallets.toWallet.id;
