@@ -7,19 +7,42 @@ dataSources:
     network: arbitrum-rinkeby
     source:
       address: '0x5fAe6B0BE396B9541D5Cc8D50a98168b790d0d7e'
-      abi: LootRealm
+      abi: LootRealmL2
       startBlock: 4488387
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - Transfer
+        - Realm
       abis:
-        - name: LootRealm
-          file: ./abis/LootRealm.json
+        - name: LootRealmL2
+          file: ./abis/LootRealmL2.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleRealmTransfer
-      file: ./src/mapping.ts
+      file: ./src/realm-mapping.ts
 
+  - kind: ethereum/contract
+    name: SRealms
+    network: arbitrum-rinkeby
+    source:
+      address: '0xa6dE5fe02207A649F773d6dC899627193b6d78b4'
+      abi: SRealmL2
+      startBlock: 5189751
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+        - SRealm
+        - Wallet
+      abis:
+        - name: SRealmL2
+          file: ./abis/SRealmL2.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/srealm-mapping.ts

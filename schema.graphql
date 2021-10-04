@@ -1,51 +1,4 @@
-type _Schema_
-  @fulltext(
-    name: "search"
-    language: en
-    algorithm: rank
-    include: [
-      {
-        entity: "Bag"
-        fields: [
-          { name: "chest" }
-          { name: "foot" }
-          { name: "hand" }
-          { name: "head" }
-          { name: "neck" }
-          { name: "ring" }
-          { name: "waist" }
-          { name: "weapon" }
-        ]
-      }
-    ]
-  )
 
-type Bag @entity {
-  id: ID!
-  chest: String!
-  foot: String!
-  hand: String!
-  head: String!
-  neck: String!
-  ring: String!
-  waist: String!
-  weapon: String!
-  currentOwner: Wallet!
-  minted: BigInt!
-}
-type MLoot @entity {
-  id: ID!
-  chest: String!
-  foot: String!
-  hand: String!
-  head: String!
-  neck: String!
-  ring: String!
-  waist: String!
-  weapon: String!
-  currentOwner: Wallet!
-  minted: BigInt!
-}
 type Realm @entity {
   id: ID!
   tokenURI: String
@@ -53,16 +6,9 @@ type Realm @entity {
   minted: BigInt!
 }
 
-type Treasure @entity {
+type SRealm @entity {
   id: ID!
-  asset1: String!
-  asset2: String!
-  asset3: String!
-  asset4: String!
-  asset5: String!
-  asset6: String!
-  asset7: String!
-  asset8: String!
+  tokenURI: String
   currentOwner: Wallet!
   minted: BigInt!
 }
@@ -70,23 +16,17 @@ type Treasure @entity {
 type Wallet @entity {
   id: ID!
   address: Bytes!
-  bags: [Bag!] @derivedFrom(field: "currentOwner")
-  bagsHeld: BigInt
-  mLoot: [MLoot!] @derivedFrom(field: "currentOwner")
-  mLootHeld: BigInt
   realms: [Realm!] @derivedFrom(field: "currentOwner")
-  realmsHeld: BigInt
-  treasures: [Treasure!] @derivedFrom(field: "currentOwner")
-  treasuresHeld: BigInt
+  realmsHeld: BigInt!
+  srealms: [SRealm!] @derivedFrom(field: "currentOwner")
+  srealmsHeld: BigInt!
   joined: BigInt!
 }
 
 type Transfer @entity {
   id: ID!
-  bag: Bag
-  mLoot: MLoot
   realm: Realm
-  treasure: Treasure
+  srealm: SRealm
   from: Wallet!
   to: Wallet!
   txHash: Bytes!
