@@ -30,9 +30,38 @@ type Bag @entity {
   ring: String!
   waist: String!
   weapon: String!
+  chestSuffixId: Int!
+  footSuffixId: Int!
+  handSuffixId: Int!
+  headSuffixId: Int!
+  neckSuffixId: Int!
+  ringSuffixId: Int!
+  waistSuffixId: Int!
+  weaponSuffixId: Int!
+  currentOwner: Wallet!
+  minted: BigInt!
+  manas: [Mana!]! @derivedFrom(field: "lootTokenId")
+  manasClaimed: BigInt!
+  itemsClaimed: Boolean!
+}
+
+type GAdventurer @entity {
+  id: ID!
+  chest: String!
+  foot: String!
+  hand: String!
+  head: String!
+  neck: String!
+  ring: String!
+  waist: String!
+  weapon: String!
+  order: String!
+  orderColor: String!
+  orderCount: String!
   currentOwner: Wallet!
   minted: BigInt!
 }
+
 type MLoot @entity {
   id: ID!
   chest: String!
@@ -67,17 +96,42 @@ type Treasure @entity {
   minted: BigInt!
 }
 
+type Mana @entity {
+  id: ID!
+  lootTokenId: Bag!
+  itemName: String!
+  suffixId: Int!
+  inventoryId: Int!
+  currentOwner: Wallet!
+  minted: BigInt!
+}
+
+type Item @entity {
+  id: ID!
+  lootTokenId: Bag!
+  itemName: String!
+  itemType: String!
+  suffix: String
+  currentOwner: Wallet!
+}
+
 type Wallet @entity {
   id: ID!
   address: Bytes!
   bags: [Bag!] @derivedFrom(field: "currentOwner")
-  bagsHeld: BigInt
+  bagsHeld: BigInt!
   mLoot: [MLoot!] @derivedFrom(field: "currentOwner")
-  mLootHeld: BigInt
+  mLootsHeld: BigInt!
   realms: [Realm!] @derivedFrom(field: "currentOwner")
-  realmsHeld: BigInt
+  realmsHeld: BigInt!
   treasures: [Treasure!] @derivedFrom(field: "currentOwner")
-  treasuresHeld: BigInt
+  treasuresHeld: BigInt!
+  manas: [Mana!] @derivedFrom(field: "currentOwner")
+  manasHeld: BigInt!
+  gAdventurers: [GAdventurer!] @derivedFrom(field: "currentOwner")
+  gAdventurersHeld: BigInt!
+  items: [Item!] @derivedFrom(field: "currentOwner")
+  itemsHeld: BigInt!
   joined: BigInt!
 }
 
@@ -87,6 +141,9 @@ type Transfer @entity {
   mLoot: MLoot
   realm: Realm
   treasure: Treasure
+  mana: Mana
+  gAdventurer: GAdventurer
+  item: [Item!]
   from: Wallet!
   to: Wallet!
   txHash: Bytes!

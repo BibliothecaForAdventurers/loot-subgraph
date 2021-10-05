@@ -3,85 +3,24 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: Loot
-    network: mainnet
-    source:
-      address: '0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7'
-      abi: Loot
-      startBlock: 13108876
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      entities:
-        - Transfer
-      abis:
-        - name: Loot
-          file: ./abis/Loot.json
-      eventHandlers:
-        - event: Transfer(indexed address,indexed address,indexed uint256)
-          handler: handleTransfer
-      file: ./src/mapping.ts
-
-  - kind: ethereum/contract
-    name: LootMore
-    network: mainnet
-    source:
-      address: '0x1dfe7Ca09e99d10835Bf73044a23B73Fc20623DF'
-      abi: LootMore
-      startBlock: 13160010
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      entities:
-        - Transfer
-      abis:
-        - name: LootMore
-          file: ./abis/LootMore.json
-      eventHandlers:
-        - event: Transfer(indexed address,indexed address,indexed uint256)
-          handler: handleMLootTransfer
-      file: ./src/mapping.ts     
-
-  - kind: ethereum/contract
     name: LootRealm
-    network: mainnet
+    network: rinkeby
     source:
-      address: '0x7afe30cb3e53dba6801aa0ea647a0ecea7cbe18d'
+      address: '0x6b13f1c319c2dda7ae15c04f540671b8a0e2ae9b'
       abi: LootRealm
-      startBlock: 13134698
+      startBlock: 9259490
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - Transfer
+        - Realm
+        - Wallet
       abis:
         - name: LootRealm
           file: ./abis/LootRealm.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
-          handler: handleRealmTransfer
-      file: ./src/mapping.ts
-
-  - kind: ethereum/contract
-    name: LootTreasure
-    network: mainnet
-    source:
-      address: '0xf3DFbE887D81C442557f7a59e3a0aEcf5e39F6aa'
-      abi: LootTreasure
-      startBlock: 13144686
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      entities:
-        - Transfer
-      abis:
-        - name: LootTreasure
-          file: ./abis/LootTreasure.json
-      eventHandlers:
-        - event: Transfer(indexed address,indexed address,indexed uint256)
-          handler: handleTreasureTransfer
-      file: ./src/mapping.ts
+          handler: handleTransfer
+      file: ./src/realm-mapping.ts
