@@ -8,7 +8,6 @@ type Realm @entity {
 
 type SRealm @entity {
   id: ID!
-  tokenURI: String
   currentOwner: Wallet!
   minted: BigInt!
 }

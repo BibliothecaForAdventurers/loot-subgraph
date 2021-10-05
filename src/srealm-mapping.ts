@@ -9,7 +9,6 @@ export function handleTransfer(event: TransferEvent): void {
 
   let tokenId = event.params.tokenId;
   let wallets = getWallets(event.params.from, event.params.to, event);
-
   if(!isZeroAddress(wallets.fromWallet.id)) {
     wallets.fromWallet.srealmsHeld = wallets.fromWallet.srealmsHeld.minus(BigInt.fromI32(1))
   }
@@ -17,15 +16,13 @@ export function handleTransfer(event: TransferEvent): void {
 
   wallets.toWallet.srealmsHeld = wallets.toWallet.srealmsHeld.plus(BigInt.fromI32(1))
   wallets.toWallet.save()
-
   let srealm = SRealm.load(tokenId.toString());
+
   if (srealm != null) {
     srealm.currentOwner = wallets.toWallet.id;
     srealm.save();
   } else {
     srealm = new SRealm(tokenId.toString());
-    let contract = SRealmL2.bind(event.address);
-    srealm.tokenURI = contract.tokenURI(tokenId);
     srealm.currentOwner = wallets.toWallet.id;
     srealm.minted = event.block.timestamp;
     srealm.save();
