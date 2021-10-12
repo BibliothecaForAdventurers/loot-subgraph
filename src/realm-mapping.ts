@@ -1,11 +1,11 @@
 import { Transfer as TransferEvent } from '../generated/LootRealm/LootRealm';
 
 import { isZeroAddress, getWallets, getTransfer } from './utils';
-
+import { rarityArray } from './realm-rarity';
 import { Realm } from '../generated/schema';
 import { LootRealm } from '../generated/LootRealm/LootRealm';
 
-import { BigInt } from '@graphprotocol/graph-ts';
+import { BigDecimal, BigInt } from '@graphprotocol/graph-ts';
 
 export function handleTransfer(event: TransferEvent): void {
   let tokenId = event.params.tokenId;
@@ -26,7 +26,13 @@ export function handleTransfer(event: TransferEvent): void {
   } else {
     realm = new Realm(tokenId.toString());
     let contract = LootRealm.bind(event.address);
+    let tokenrarityScore = rarityArray[tokenId.toI32()][0]
+    let score = BigDecimal.fromString(tokenrarityScore.toString())
+    let tokenrarityRank = rarityArray[tokenId.toI32()][1]
+    let rank = BigDecimal.fromString(tokenrarityRank.toString())
     realm.tokenURI = contract.tokenURI(tokenId);
+    realm.rarityScore = score;
+    realm.rarityRank = rank;
     realm.currentOwner = wallets.toWallet.id;
     realm.minted = event.block.timestamp;
     realm.save();
