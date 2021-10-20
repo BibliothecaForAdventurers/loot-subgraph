@@ -28,7 +28,7 @@ dataSources:
     name: SRealms
     network: arbitrum-rinkeby
     source:
-      address: '0xa6dE5fe02207A649F773d6dC899627193b6d78b4'
+      address: '0xaba69E747c749173518dc3dd1507e7B871297F03'
       abi: SRealmL2
       startBlock: 5189751
     mapping:
@@ -46,3 +46,28 @@ dataSources:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
       file: ./src/srealm-mapping.ts
+
+  - kind: ethereum/contract
+    name: Diamond
+    network: arbitrum-rinkeby
+    source:
+      address: '0xA642375Cc15249A81da9c435fB4eDD8A9343ce7F'
+      abi: diamond
+      startBlock: 5189751
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+        - SRealm
+        - Wallet
+      abis:
+        - name: diamond
+          file: ./abis/diamond.json
+      eventHandlers:
+        - event: RealmStaked(address,uint256,uint256)
+          handler: handleRealmStakedEvent
+        - event: RealmData(uint256,string,uint8[],uint8[],uint8,uint8)
+          handler: handleRealmDataEvent
+      file: ./src/diamond-mapping.ts
