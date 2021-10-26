@@ -1,0 +1,23 @@
+{
+    "network": "rinkeby",
+    "loot": {
+        "address": "0x0000000000000000000000000000000000000000",
+        "startBlock": 13108876
+    },
+    "lootRealm": {
+        "address": "0x6B13F1C319c2DdA7Ae15c04f540671B8A0E2AE9B",
+        "startBlock": 9259490
+    },
+    "lootMore": {
+        "address": "0x0000000000000000000000000000000000000000",
+        "startBlock": 13160010
+    },
+    "genesisMana": {
+        "address": "0x0000000000000000000000000000000000000000",
+        "startBlock": 13186741
+    },
+    "genesisAdventurer": {
+        "address": "0x0000000000000000000000000000000000000000",
+        "startBlock": 13235759
+    }
+}

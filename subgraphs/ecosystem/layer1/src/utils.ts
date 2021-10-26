@@ -1,5 +1,3 @@
-import { Transfer as TransferEvent } from '../generated/Loot/Loot';
-
 import { Transfer, Wallet} from '../generated/schema';
 import { BigInt, Address, ethereum } from '@graphprotocol/graph-ts';
 

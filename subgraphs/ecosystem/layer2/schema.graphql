@@ -1,0 +1,73 @@
+
+type Realm @entity {
+  id: ID!
+  tokenURI: String
+  currentOwner: Wallet!
+  minted: BigInt!
+}
+
+enum ResourceName {
+  Wood
+  Stone
+  Coal
+  Copper
+  Obsidian
+  Silver
+  Ironwood
+  Cold_Iron
+  Gold
+  Hartwood
+  Diamonds
+  Sapphire
+  Deep_Crystal
+  Ruby
+  Ignium
+  Ethereal_Silica
+  True_Ice
+  Twilight_Quartz
+  Alchemical_Silver
+  Adamantine
+  Mithral
+  Dragonhide
+}
+
+
+interface Resource {
+  id: ID!
+  name: String
+}
+type SRealm @entity {
+  id: ID!
+  currentOwner: Wallet!
+  minted: BigInt!
+  ageSettled: BigInt
+  ageClaimed: BigInt
+  name: String
+  regions: Int
+  cities: Int
+  harbors: Int
+  rivers: Int
+  resources: [Int!]
+  wonder: Int
+  order: Int  
+}
+
+type Wallet @entity {
+  id: ID!
+  address: Bytes!
+  realms: [Realm!] @derivedFrom(field: "currentOwner")
+  realmsHeld: BigInt!
+  srealms: [SRealm!] @derivedFrom(field: "currentOwner")
+  srealmsHeld: BigInt!
+  joined: BigInt!
+}
+
+type Transfer @entity {
+  id: ID!
+  realm: Realm
+  srealm: SRealm
+  from: Wallet!
+  to: Wallet!
+  txHash: Bytes!
+  timestamp: BigInt!
+}

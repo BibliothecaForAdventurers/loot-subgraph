@@ -1,0 +1,73 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: LootRealm
+    network: {{ network }}
+    source:
+      address: '{{ lootRealm.address }}'
+      abi: LootRealmL2
+      startBlock: {{ lootRealm.startBlock }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+        - Realm
+      abis:
+        - name: LootRealmL2
+          file: ./abis/LootRealmL2.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleRealmTransfer
+      file: ./src/realm-mapping.ts
+
+  - kind: ethereum/contract
+    name: SRealms
+    network: {{ network }}
+    source:
+      address: '{{ sRealm.address }}'
+      abi: SRealmL2
+      startBlock: {{ sRealm.startBlock }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+        - SRealm
+        - Wallet
+      abis:
+        - name: SRealmL2
+          file: ./abis/SRealmL2.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/srealm-mapping.ts
+
+  - kind: ethereum/contract
+    name: Diamond
+    network: {{ network }}
+    source:
+      address: '{{ diamond.address }}'
+      abi: diamond
+      startBlock: {{ diamond.startBlock }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+        - SRealm
+        - Wallet
+      abis:
+        - name: diamond
+          file: ./abis/diamond.json
+      eventHandlers:
+        - event: RealmStaked(address,uint256,uint256)
+          handler: handleRealmStakedEvent
+        - event: RealmData(uint256,string,uint8[],uint8[],uint8,uint8)
+          handler: handleRealmDataEvent
+      file: ./src/diamond-mapping.ts

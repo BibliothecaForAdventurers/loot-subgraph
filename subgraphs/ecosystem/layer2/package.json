@@ -1,0 +1,23 @@
+{
+  "name": "loot-ecosystem-layer-2",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "create-local": "graph create --node http://localhost:8020/ bibliotheca-for-adventures",
+    "remove-local": "graph remove --node http://localhost:8020/ bibliotheca-for-adventures",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 bibliotheca-for-adventures",
+
+    "deploy:arbitrum": "graph deploy --product hosted-service bibliothecaforadventurers/loot-ecosystem",
+    "deploy:arbitrum-rinkeby": "graph deploy --product hosted-service redbeardeth/arb-rink-srealm",
+    
+    "prepare:rinkeby":"yarn -v",
+    "prepare:mainnet":"yarn -v",
+    "prepare:arbitrum": "mustache ../../../config/arbitrum.json subgraph.template.yaml > subgraph.yaml",
+    "prepare:arbitrum-rinkeby": "mustache ../../../config/arbitrum-rinkeby.json subgraph.template.yaml > subgraph.yaml"
+  },
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "RedBeard",
+  "description": ""
+}

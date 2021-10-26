@@ -1,0 +1,23 @@
+{
+    "network": "mainnet",
+    "loot": {
+        "address": "0xc35dadb65012ec5796536bd9864ed8773abc74c4",
+        "startBlock": 13108876
+    },
+    "lootRealm": {
+        "address": "0x7afe30cb3e53dba6801aa0ea647a0ecea7cbe18d",
+        "startBlock": 13134698
+    },
+    "lootMore": {
+        "address": "0x1dfe7Ca09e99d10835Bf73044a23B73Fc20623DF",
+        "startBlock": 13160010
+    },
+    "genesisMana": {
+        "address": "0xf4b6040a4b1b30f1d1691699a8f3bf957b03e463",
+        "startBlock": 13186741
+    },
+    "genesisAdventurer": {
+        "address": "0xc35dadb65012ec5796536bd9864ed8773abc74c4",
+        "startBlock": 13235759
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "network": "arbitrum-rinkeby",
+    "lootRealm": {
+        "address": "0x5fAe6B0BE396B9541D5Cc8D50a98168b790d0d7e",
+        "startBlock": 4488387
+    },
+    "sRealm": {
+        "address": "0x4D9a6c1EA9Bd17B9Bce0257c27FC32986372990D",
+        "startBlock": 5982947
+    },
+    "diamond": {
+        "address": "0xFBe0421c53706746151ACa2Cf22F81Dc41262519",
+        "startBlock": 5983000
+    }
+}
