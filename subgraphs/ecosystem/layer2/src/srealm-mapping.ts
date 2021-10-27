@@ -2,7 +2,7 @@ import { SRealmL2, Transfer as TransferEvent } from '../generated/SRealms/SRealm
 import { getTransfer, getWallets, isZeroAddress } from './utils';
 
 import { SRealm } from '../generated/schema';
-import { BigInt } from '@graphprotocol/graph-ts';
+import { BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 
 
 export function handleTransfer(event: TransferEvent): void {
@@ -25,6 +25,7 @@ export function handleTransfer(event: TransferEvent): void {
     srealm = new SRealm(tokenId.toString());
     srealm.currentOwner = wallets.toWallet.id;
     srealm.minted = event.block.timestamp;
+    srealm.rarityScore = BigDecimal.fromString('0')
     srealm.save();
   }
 

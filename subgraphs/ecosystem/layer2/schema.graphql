@@ -32,9 +32,11 @@ enum ResourceName {
 }
 
 
-interface Resource {
+type Resource @entity{
   id: ID!
   name: String
+  totalRealms: Int
+  stakedRealms: BigInt!
 }
 type SRealm @entity {
   id: ID!
@@ -47,8 +49,9 @@ type SRealm @entity {
   cities: Int
   harbors: Int
   rivers: Int
-  resources: [Int!]
+  resources: [Resource!]
   wonder: Int
+  rarityScore: BigDecimal
   order: Int  
 }
 
