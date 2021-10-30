@@ -1,5 +1,5 @@
 import { Transfer as RealmTransferEvent } from '../generated/LootRealm/LootRealmL2';
-import { getTransfer, getWallets, isZeroAddress } from './utils';
+import { getTransfer, initWallet, isZeroAddress } from './utils';
 
 import { Realm } from '../generated/schema';
 
@@ -11,30 +11,32 @@ import { BigInt } from '@graphprotocol/graph-ts';
 export function handleRealmTransfer(event: RealmTransferEvent): void {
 
   let tokenId = event.params.tokenId;
-  let wallets = getWallets(event.params.from, event.params.to, event);
 
-  if(!isZeroAddress(wallets.fromWallet.id)) {
-    wallets.fromWallet.realmsHeld = wallets.fromWallet.realmsHeld.minus(BigInt.fromI32(1))
+  let fromWallet = initWallet(event.params.from, event);
+  let toWallet = initWallet(event.params.to, event);
+
+  if(!isZeroAddress(fromWallet.id)) {
+    fromWallet.realmsHeld = fromWallet.realmsHeld.minus(BigInt.fromI32(1))
   }
-  wallets.fromWallet.save()
+  fromWallet.save()
 
-  wallets.toWallet.realmsHeld = wallets.toWallet.realmsHeld.plus(BigInt.fromI32(1))
-  wallets.toWallet.save()
+  toWallet.realmsHeld = toWallet.realmsHeld.plus(BigInt.fromI32(1))
+  toWallet.save()
 
   let realm = Realm.load(tokenId.toString());
   if (realm != null) {
-    realm.currentOwner = wallets.toWallet.id;
+    realm.currentOwner = toWallet.id;
     realm.save();
   } else {
     realm = new Realm(tokenId.toString());
     let contract = LootRealmL2.bind(event.address);
     realm.tokenURI = contract.tokenURI(tokenId);
-    realm.currentOwner = wallets.toWallet.id;
+    realm.currentOwner = toWallet.id;
     realm.minted = event.block.timestamp;
     realm.save();
   }
 
-  let transfer = getTransfer(event, wallets)  
+  let transfer = getTransfer(event, {fromWallet, toWallet})  
   transfer.realm = tokenId.toString();
   transfer.save()
 

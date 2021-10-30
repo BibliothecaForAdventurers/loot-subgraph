@@ -5,7 +5,12 @@ type Realm @entity {
   currentOwner: Wallet!
   minted: BigInt!
 }
-
+enum RealmTraitOption {
+  regions
+  cities
+  harbors
+  rivers
+}
 enum ResourceName {
   Wood
   Stone
@@ -30,14 +35,46 @@ enum ResourceName {
   Mithral
   Dragonhide
 }
+enum Buildings {
+  markets
+  aqueducts
+  castles
+  ports
+  barracks
+  farms
+  temples
+  shipyard
+  fishing_village
+}
+type RealmBuilding @entity {
+  id: ID!
+  name: Buildings!
+  value: BigInt!
+  buildingUpgrades: [BuildingUpgrade!] @derivedFrom(field: "buildingUpgraded")
+  realmTrait: RealmTrait!
+}
 
+type RealmTrait @entity {
+  id: ID!
+  name: RealmTraitOption!
+  value: Int
+  buildings: [RealmBuilding!]!
+  sRealm: SRealm!
+}
 
+type BuildingUpgrade @entity {
+  id: ID!
+  address: Wallet!
+  buildingUpgraded: RealmBuilding
+  timestamp: BigInt!
+}
 type Resource @entity{
   id: ID!
   name: String
   totalRealms: Int
   stakedRealms: BigInt!
 }
+
 type SRealm @entity {
   id: ID!
   currentOwner: Wallet!
@@ -45,14 +82,41 @@ type SRealm @entity {
   ageSettled: BigInt
   ageClaimed: BigInt
   name: String
-  regions: Int
-  cities: Int
-  harbors: Int
-  rivers: Int
-  resources: [Resource!]
+  traits: [RealmTrait!]
+  resources: [RealmResource!]
   wonder: Int
   rarityScore: BigDecimal
   order: Int  
+  raidAttacks: BigInt! 
+  raidDefends: BigInt!
+  raiderRealmResults: [RaidResult!] @derivedFrom(field: "raiderRealm")
+  defenderRealmResults: [RaidResult!] @derivedFrom(field: "defenderRealm")
+}
+
+type RealmResource @entity {
+  id: ID!
+  resource: Resource
+  level: BigInt!
+  resourceUpgrades: [ResourceUpgrade!] @derivedFrom(field: "realmResourceUpgraded")
+}
+type ResourceUpgrade @entity {
+  id: ID!
+  address: Wallet!
+  realmResourceUpgraded: RealmResource
+  timestamp: BigInt!
+}
+
+type RaidResult @entity {
+  id: ID!
+  raider: Wallet!
+  defender: Wallet!
+  raiderRealm: SRealm
+  defenderRealm: SRealm
+  raiderUnitsLost: BigInt
+  defenderUnitsLost: BigInt
+  resourcesIdsPillaged: [Resource!]
+  resourcesValuesPillaged: [BigInt!]
+  unitsCaptured: BigInt
 }
 
 type Wallet @entity {
@@ -61,7 +125,13 @@ type Wallet @entity {
   realms: [Realm!] @derivedFrom(field: "currentOwner")
   realmsHeld: BigInt!
   srealms: [SRealm!] @derivedFrom(field: "currentOwner")
-  srealmsHeld: BigInt!
+  srealmsHeld: BigInt! 
+  raidAttacks: BigInt! 
+  raidDefends: BigInt!
+  raiderResults: [RaidResult!] @derivedFrom(field: "raider")
+  defenderResults: [RaidResult!] @derivedFrom(field: "defender")
+  resourceUpgradesBuilt: [ResourceUpgrade!] @derivedFrom(field: "address")
+  buildingUpgradesBuilt: [BuildingUpgrade!] @derivedFrom(field: "address")
   joined: BigInt!
 }
 

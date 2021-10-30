@@ -70,4 +70,10 @@ dataSources:
           handler: handleRealmStakedEvent
         - event: RealmData(uint256,string,uint8[],uint8[],uint8,uint8)
           handler: handleRealmDataEvent
+        - event: RaidResult(uint256,uint256,address,address,uint256,uint256,uint256[],uint256[],uint256)
+          handler: handleRaidResult
+        - event: ResourceUpgraded(address,uint256,uint256)
+          handler: handleResourceUpgraded
+        - event: ConstructionEvent(address,uint256,uint256)
+          handler: handleConstructionEvent
       file: ./src/diamond-mapping.ts

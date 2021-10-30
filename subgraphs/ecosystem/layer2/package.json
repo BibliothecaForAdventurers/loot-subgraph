@@ -10,7 +10,8 @@
 
     "deploy:arbitrum": "graph deploy --product hosted-service bibliothecaforadventurers/loot-ecosystem",
     "deploy:arbitrum-rinkeby": "graph deploy --product hosted-service redbeardeth/arb-rink-srealm",
-    
+    "deploy:test": "graph deploy --product hosted-service redbeardeth/lootdev",
+
     "prepare:rinkeby":"yarn -v",
     "prepare:mainnet":"yarn -v",
     "prepare:arbitrum": "mustache ../../../config/arbitrum.json subgraph.template.yaml > subgraph.yaml",
