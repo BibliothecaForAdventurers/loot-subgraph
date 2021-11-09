@@ -30,6 +30,8 @@ export function handleTransfer(event: TransferEvent): void {
     srealm.minted = event.block.timestamp;
     srealm.resourceIds = []
     srealm.rarityScore = new BigDecimal(BigInt.fromI32(0))
+    srealm.raidAttacks = BigInt.fromI32(0)
+    srealm.raidDefends = BigInt.fromI32(0)
     srealm.save();
   }
 

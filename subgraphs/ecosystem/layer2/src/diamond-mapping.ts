@@ -137,6 +137,18 @@ export function handleRaidResult(event: RaidResultEvent): void {
         raid.resourcesPillaged = resourceIdArray
         raid.resourcesValuesPillaged = event.params.resourcesValuesPillaged
         raid.timestamp = event.block.timestamp;
+
+        let raidingSrealm = SRealm.load(event.params.attackingRealm.toString());
+        if (raidingSrealm) {
+            raidingSrealm.raidAttacks = raidingSrealm.raidAttacks.plus(BigInt.fromI32(1))
+            raidingSrealm.save()
+        }
+        let defendingSrealm = SRealm.load(event.params.defendingRealm.toString());
+        if (defendingSrealm) {
+            defendingSrealm.raidDefends = defendingSrealm.raidDefends.plus(BigInt.fromI32(1))
+            defendingSrealm.save()
+        }
+
         raid.save();
 
     }
