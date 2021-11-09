@@ -1,0 +1,34 @@
+{
+  "name": "@bibliotheca/eip1155-subgraph",
+  "version": "1.0.0",
+  "description": "",
+  "author": "RedBeard",
+  "license": "MIT",
+
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "create-local": "graph create --node http://localhost:8020/ bibliotheca-for-adventures",
+    "remove-local": "graph remove --node http://localhost:8020/ bibliotheca-for-adventures",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 bibliotheca-for-adventures",
+
+    "deploy:arbitrum": "graph deploy --product hosted-service redbeardeth/arb-loot-1155",
+    "deploy:arbitrum-rinkeby": "graph deploy --product hosted-service redbeardeth/arb-rink-1155",
+    "deploy:test": "graph deploy --product hosted-service redbeardeth/lootdev",
+
+    "prepare:rinkeby":"yarn -v",
+    "prepare:mainnet":"yarn -v",
+    "prepare:arbitrum": "mustache ../../config/arbitrum.json subgraph.template.yaml > subgraph.yaml",
+    "prepare:arbitrum-rinkeby": "mustache ../../config/arbitrum-rinkeby.json subgraph.template.yaml > subgraph.yaml"
+    
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "ethereum-block-by-date": "^1.4.0",
+    "ethers": "^5.3.1"
+  },
+  "devDependencies": {
+    "@amxx/graphprotocol-utils": "^1.1.0-alpha.0",
+    "concat": "^1.0.3"
+  }
+}

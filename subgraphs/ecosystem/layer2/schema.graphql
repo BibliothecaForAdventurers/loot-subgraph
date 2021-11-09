@@ -46,6 +46,7 @@ enum Buildings {
   shipyard
   fishing_village
 }
+
 type RealmBuilding @entity {
   id: ID!
   name: Buildings!
@@ -73,6 +74,7 @@ type Resource @entity{
   name: String
   totalRealms: Int
   stakedRealms: BigInt!
+  srealms: [RealmResource!]! @derivedFrom(field: "resource")
 }
 
 type SRealm @entity {
@@ -83,9 +85,10 @@ type SRealm @entity {
   ageClaimed: BigInt
   name: String
   traits: [RealmTrait!]
-  resources: [RealmResource!]
+  resourceIds: [Int!]!
+  resources: [RealmResource!] @derivedFrom(field: "srealm")
   wonder: Int
-  rarityScore: BigDecimal
+  rarityScore: BigDecimal!
   order: Int  
   raidAttacks: BigInt! 
   raidDefends: BigInt!
@@ -95,7 +98,8 @@ type SRealm @entity {
 
 type RealmResource @entity {
   id: ID!
-  resource: Resource
+  srealm: SRealm!
+  resource: Resource!
   level: BigInt!
   resourceUpgrades: [ResourceUpgrade!] @derivedFrom(field: "realmResourceUpgraded")
 }
@@ -108,15 +112,18 @@ type ResourceUpgrade @entity {
 
 type RaidResult @entity {
   id: ID!
+  result: BigInt
   raider: Wallet!
   defender: Wallet!
   raiderRealm: SRealm
   defenderRealm: SRealm
   raiderUnitsLost: BigInt
   defenderUnitsLost: BigInt
-  resourcesIdsPillaged: [Resource!]
+  resourcesPillaged: [Resource!]
   resourcesValuesPillaged: [BigInt!]
   unitsCaptured: BigInt
+  timestamp: BigInt!
+
 }
 
 type Wallet @entity {

@@ -1,0 +1,56 @@
+specVersion: 0.0.2
+description: eip1155
+schema:
+  file: ./src/schema.gql
+dataSources:
+  - kind: ethereum/contract
+    name: Loot1155
+    network: {{ network }}
+    source:
+      address: '{{ resources.address }}'
+      abi: Resources
+      startBlock: {{resources.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Token
+      abis:
+        - name: Resources
+          file: ./abis/Resources.json
+        - name: IERC1155MetadataURI
+          file: ./abis/IERC1155MetadataURI.json
+      eventHandlers:
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+          handler: handleTransferBatch
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingle
+        - event: URI(string,indexed uint256)
+          handler: handleURI
+      file: ./src/index.ts
+      
+  - kind: ethereum/contract
+    name: LordsERC20
+    network: {{ network }}
+    source:
+      address: '{{ lords.address }}'
+      abi: LordsERC20
+      startBlock: {{lords.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Token
+      abis:
+        - name: LordsERC20
+          file: ./abis/LordsERC20.json
+        - name: IERC20
+          file: ./abis/IERC20.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleERC20Transfer
+      file: ./src/index.ts

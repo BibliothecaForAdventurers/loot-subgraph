@@ -9,7 +9,15 @@
         "startBlock": 5982947
     },
     "diamond": {
-        "address": "0xFBe0421c53706746151ACa2Cf22F81Dc41262519",
+        "address": "0x1BeB505670cF846af44Fae915e8b218eDff2E16D",
         "startBlock": 5983000
+    },
+    "resources": {
+        "address": "0x1BeB505670cF846af44Fae915e8b218eDff2E16D",
+        "startBlock": 5983012 
+    },
+    "lords": {
+        "address": "0x9c3Cb08A7C4924B0365D5FE427Df04adD3FA3024",
+        "startBlock": 5982950 
     }
 }

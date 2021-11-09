@@ -49,8 +49,7 @@ export function handleRealmDataEvent(event: RealmDataEvent): void {
             srealm.wonder = wonder;
         }
         const eventResources = event.params._resources;
-        let resources = new Array<string>();
-
+        srealm.resourceIds = eventResources
         for (let i = 0; i < eventResources.length; i++) {
             let resource = Resource.load(eventResources[i].toString());
             if (!resource) {
@@ -60,23 +59,22 @@ export function handleRealmDataEvent(event: RealmDataEvent): void {
                 resource.stakedRealms = BigInt.fromI32(0)
             }
             resource.stakedRealms = resource.stakedRealms.plus(BigInt.fromI32(1))
-            resource.save();
 
-            const realmResourceId = tokenId.toString().concat('-').concat(eventResources[i].toString())
+            const realmResourceId = tokenId.toString().concat('-').concat(resource.id)
             log.info('realmresourceid: {}', [realmResourceId])
 
             let realmResource = RealmResource.load(realmResourceId)
             if (!realmResource) {
                 realmResource = new RealmResource(realmResourceId);
-                realmResource.resource = resource.id
                 realmResource.level = BigInt.fromI32(0)
+                realmResource.srealm = srealm.id
+                realmResource.resource = resource.id
                 realmResource.save()
-                resources.push(realmResource.id)
                 log.info('pushed: {}', [realmResource.id])
-
             }
+            resource.save();
         }
-        srealm.resources = resources
+
         let realmTraits = new Array<string>();
 
         const realmTraitOptions = [
@@ -121,8 +119,8 @@ export function handleRaidResult(event: RaidResultEvent): void {
         toWallet.save()
         raid = new RaidResult(raidId.toHex());
 
-
-        raid.raider = toWallet.id;
+        raid.result = event.params.raidResult
+        raid.raider = fromWallet.id;
         raid.defender = toWallet.id;
         raid.raiderRealm = event.params.attackingRealm.toString()
         raid.defenderRealm = event.params.defendingRealm.toString()
@@ -130,6 +128,15 @@ export function handleRaidResult(event: RaidResultEvent): void {
         raid.defenderUnitsLost = event.params.defendingUnitsLost
         raid.unitsCaptured = event.params.unitsCaptured
 
+        const resourceIds =  event.params.resourcesIdsPillaged
+        let resourceIdArray = new Array<string>();
+
+        for (let i = 0; i < resourceIds.length; i++) {
+            resourceIdArray.push(resourceIds[i].toString())
+        }
+        raid.resourcesPillaged = resourceIdArray
+        raid.resourcesValuesPillaged = event.params.resourcesValuesPillaged
+        raid.timestamp = event.block.timestamp;
         raid.save();
 
     }
@@ -191,7 +198,7 @@ export function handleConstructionEvent(event: ConstructionEvent): void {
         let wallet = initWallet(event.params.owner, event);
         wallet.save()
 
-        let buildingUpgrade = new BuildingUpgrade(realmBuilding.id.concat('-').concat(realmBuilding.value.toString()))
+        const buildingUpgrade = new BuildingUpgrade(realmBuilding.id.concat('-').concat(realmBuilding.value.toString()))
 
         buildingUpgrade.address = wallet.id
         buildingUpgrade.buildingUpgraded = realmBuilding.id
