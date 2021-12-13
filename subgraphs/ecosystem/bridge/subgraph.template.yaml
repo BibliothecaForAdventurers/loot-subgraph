@@ -1,0 +1,27 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Journey
+    network: {{ network }}
+    source:
+      address: '{{ journey.address }}'
+      abi: Journey
+      startBlock: {{ journey.startBlock }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Realm
+        - Wallet
+      abis:
+        - name: Journey
+          file: ./abis/Journey.json
+      eventHandlers:
+        - event: StakeRealms(uint256[],address)
+          handler: handleStakeRealms
+        - event: UnStakeRealms(uint256[],address)
+          handler: handleUnStakeRealms
+      file: ./src/journey-mapping.ts

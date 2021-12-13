@@ -1,0 +1,28 @@
+
+
+type Realm @entity {
+  id: ID!
+  tokenURI: String!
+  rarityScore: BigDecimal!
+  rarityRank: BigDecimal!
+  currentOwner: Wallet!
+  minted: BigInt!
+  bridgedOwner: Wallet
+}
+
+
+type Wallet @entity {
+  id: ID!
+  address: Bytes!
+  bridgedRealms: [BigInt!]!
+  bridgedRealmsHeld: BigInt!
+  joined: BigInt!
+}
+
+type Transfer @entity {
+  id: ID!
+  realm: Realm
+  to: Wallet!
+  txHash: Bytes!
+  timestamp: BigInt!
+}

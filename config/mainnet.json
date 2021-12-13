@@ -1,7 +1,7 @@
 {
     "network": "mainnet",
     "loot": {
-        "address": "0xc35dadb65012ec5796536bd9864ed8773abc74c4",
+        "address": "0xFF9C1b15B16263C61d017ee9F65C50e4AE0113D7",
         "startBlock": 13108876
     },
     "lootRealm": {
@@ -17,7 +17,11 @@
         "startBlock": 13186741
     },
     "genesisAdventurer": {
-        "address": "0xc35dadb65012ec5796536bd9864ed8773abc74c4",
+        "address": "0x8db687aceb92c66f013e1d614137238cc698fedb",
         "startBlock": 13235759
+    },
+    "journey": {
+        "address": "0x17963290db8c30552d0cfa2a6453ff20a28c31a2",
+        "startBlock": 13773833 
     }
 }

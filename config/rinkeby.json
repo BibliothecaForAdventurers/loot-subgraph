@@ -19,5 +19,9 @@
     "genesisAdventurer": {
         "address": "0x0000000000000000000000000000000000000000",
         "startBlock": 13235759
+    },
+    "journey": {
+        "address": "0x8ff4549cb610755507732ea88b9413b625c55b7c",
+        "startblock": 9781159 
     }
 }

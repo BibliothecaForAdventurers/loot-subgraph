@@ -19,11 +19,6 @@ export function isZeroAddress(string: string): boolean {
       fromWallet = new Wallet(fromId);
       fromWallet.address = fromAddress;
       fromWallet.joined = event.block.timestamp;
-      fromWallet.bagsHeld = BigInt.fromI32(0);
-      fromWallet.mLootsHeld = BigInt.fromI32(0);
-      fromWallet.realmsHeld = BigInt.fromI32(0);
-      fromWallet.manasHeld = BigInt.fromI32(0);
-      fromWallet.gAdventurersHeld = BigInt.fromI32(0);
       fromWallet.bridgedRealmsHeld = BigInt.fromI32(0);
     }
     
@@ -33,13 +28,7 @@ export function isZeroAddress(string: string): boolean {
       toWallet = new Wallet(toId);
       toWallet.address = toAddress;
       toWallet.joined = event.block.timestamp;
-      toWallet.bagsHeld = BigInt.fromI32(0);
-      toWallet.mLootsHeld = BigInt.fromI32(0);
-      toWallet.realmsHeld = BigInt.fromI32(0);
-      toWallet.manasHeld = BigInt.fromI32(0);
-      toWallet.gAdventurersHeld = BigInt.fromI32(0);
       toWallet.bridgedRealmsHeld = BigInt.fromI32(0);
-
     }
 
     return { 
@@ -47,17 +36,3 @@ export function isZeroAddress(string: string): boolean {
       toWallet
     }
   }
-
-  export function getTransfer(event: ethereum.Event, wallet: WalletInterface): Transfer {
-    let transfer = new Transfer(
-      event.transaction.hash.toHex() + '-' + event.logIndex.toString()
-    );
-  
-    transfer.from = wallet.fromWallet.id;
-    transfer.to = wallet.toWallet.id;
-    transfer.txHash = event.transaction.hash;
-    transfer.timestamp = event.block.timestamp;
-
-    return transfer
-  }
-  

@@ -7,7 +7,7 @@ import { LootRealm } from '../generated/LootRealm/LootRealm';
 
 import { Address, log, BigDecimal, BigInt } from '@graphprotocol/graph-ts';
 
-const journeyAddress = "0x8ff4549cb610755507732ea88b9413b625c55b7c"
+const journeyAddress = "{{ journey.address }}"
 
 export function handleTransfer(event: TransferEvent): void {
   let tokenId = event.params.tokenId;

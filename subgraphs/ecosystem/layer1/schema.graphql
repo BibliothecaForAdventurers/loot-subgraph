@@ -82,20 +82,7 @@ type Realm @entity {
   rarityRank: BigDecimal!
   currentOwner: Wallet!
   minted: BigInt!
-}
-
-type Treasure @entity {
-  id: ID!
-  asset1: String!
-  asset2: String!
-  asset3: String!
-  asset4: String!
-  asset5: String!
-  asset6: String!
-  asset7: String!
-  asset8: String!
-  currentOwner: Wallet!
-  minted: BigInt!
+  bridgedOwner: Wallet
 }
 
 type Mana @entity {
@@ -126,8 +113,8 @@ type Wallet @entity {
   mLootsHeld: BigInt!
   realms: [Realm!] @derivedFrom(field: "currentOwner")
   realmsHeld: BigInt!
-  treasures: [Treasure!] @derivedFrom(field: "currentOwner")
-  treasuresHeld: BigInt!
+  bridgedRealms: [Realm!] @derivedFrom(field: "bridgedOwner")
+  bridgedRealmsHeld: BigInt!
   manas: [Mana!] @derivedFrom(field: "currentOwner")
   manasHeld: BigInt!
   gAdventurers: [GAdventurer!] @derivedFrom(field: "currentOwner")
@@ -142,7 +129,6 @@ type Transfer @entity {
   bag: Bag
   realm: Realm
   mLoot: MLoot
-  treasure: Treasure
   mana: Mana
   gAdventurer: GAdventurer
   item: [Item!]
