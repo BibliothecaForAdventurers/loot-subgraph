@@ -1,0 +1,28 @@
+type Incentive @entity {
+  id: ID!
+  rewardToken: Bytes!
+  pool: Bytes!
+  startTime: BigInt!
+  endTime: BigInt!
+  refundee: Bytes!
+  reward: BigInt!
+  ended: Boolean!
+  incentivePositions: [IncentivePosition!]! @derivedFrom(field: "incentive")
+}
+
+type IncentivePosition @entity {
+  id: ID!
+  active: Boolean!
+  incentive: Incentive!
+  position: Position!
+}
+type Position @entity {
+  id: ID!
+  tokenId: BigInt!
+  owner: Bytes!
+  staked: Boolean!
+  oldOwner: Bytes!
+  liquidity: BigInt!
+  approved: Bytes
+  incentivePositions: [IncentivePosition!]! @derivedFrom(field: "position")
+}

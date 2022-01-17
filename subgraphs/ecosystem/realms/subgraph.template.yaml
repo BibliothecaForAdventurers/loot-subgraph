@@ -1,0 +1,26 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: LootRealm
+    network: {{ network }}
+    source:
+      address: '{{ lootRealm.address }}'
+      abi: LootRealm
+      startBlock: {{ lootRealm.startBlock }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+        - Realm
+        - Wallet
+      abis:
+        - name: LootRealm
+          file: ./abis/LootRealm.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/realm-mapping.ts

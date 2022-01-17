@@ -23,5 +23,13 @@
     "journey": {
         "address": "0x17963290db8c30552d0cfa2a6453ff20a28c31a2",
         "startBlock": 13773833 
+    },
+    "staker": {
+        "address": "0xe34139463bA50bD61336E0c446Bd8C0867c6fE65",
+        "startBlock": 13864577    
+    },
+    "nftPositionsManager": {
+        "address": "0xC36442b4a4522E871399CD717aBDD847Ab11FE88",
+        "startBlock": 13864577
     }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "loot-bridge",
+  "name": "lords-staker",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
@@ -8,8 +8,8 @@
     "remove-local": "graph remove --node http://localhost:8020/ bibliotheca-for-adventures",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 bibliotheca-for-adventures",
 
-    "deploy:mainnet": "graph deploy --product hosted-service redbeardeth/staked-realms",
-    "deploy:rinkeby": "graph deploy --product hosted-service redbeardeth/staked-realms",
+    "deploy:mainnet": "graph deploy --product hosted-service bibliothecaforadventurers/uni-v3-staker",
+    "deploy:rinkeby": "graph deploy --product hosted-service redbeardeth/uni-v3-staker-rinkeby",
 
     "prepare:mainnet": "mustache ../../../config/mainnet.json subgraph.template.yaml > subgraph.yaml ",
     "prepare:rinkeby": "mustache ../../../config/rinkeby.json subgraph.template.yaml > subgraph.yaml",

@@ -1,5 +1,5 @@
 {
-  "name": "loot-bridge",
+  "name": "loot-realms",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
@@ -8,13 +8,12 @@
     "remove-local": "graph remove --node http://localhost:8020/ bibliotheca-for-adventures",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 bibliotheca-for-adventures",
 
-    "deploy:mainnet": "graph deploy --product hosted-service redbeardeth/staked-realms",
-    "deploy:rinkeby": "graph deploy --product hosted-service redbeardeth/staked-realms",
+    "deploy:rinkeby": "graph deploy --product hosted-service bibliothecaforadventurers/loot-ecosystem",
+    "deploy:mainnet": "graph deploy --product hosted-service bibliothecaforadventurers/realms",
+    "deploy:test": "graph deploy --product hosted-service redbeardeth/lootdev",
 
-    "prepare:mainnet": "mustache ../../../config/mainnet.json subgraph.template.yaml > subgraph.yaml ",
-    "prepare:rinkeby": "mustache ../../../config/rinkeby.json subgraph.template.yaml > subgraph.yaml",
-    "prepare:arbitrum": "yarn -v",
-    "prepare:arbitrum-rinkeby": "yarn -v"
+    "prepare:rinkeby":"mustache ../../../config/rinkeby.json subgraph.template.yaml > subgraph.yaml",
+    "prepare:mainnet":"mustache ../../../config/mainnet.json subgraph.template.yaml > subgraph.yaml"
   },
   "version": "1.0.0",
   "main": "index.js",
