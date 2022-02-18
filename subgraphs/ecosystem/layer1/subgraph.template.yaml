@@ -118,3 +118,26 @@ dataSources:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
       file: ./src/gadventurer-mapping.ts
+
+  - kind: ethereum/contract
+    name: CryptsAndCaverns
+    network: {{ network }}
+    source:
+      address: '{{ cryptsAndCaverns.address }}'
+      abi: Dungeons
+      startBlock: {{ cryptsAndCaverns.startBlock }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+        - Dungeon
+        - Wallet
+      abis:
+        - name: Dungeons
+          file: ./abis/CryptsAndCaverns.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/crypts-mapping.ts

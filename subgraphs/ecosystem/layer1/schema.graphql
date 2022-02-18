@@ -104,6 +104,19 @@ type Item @entity {
   currentOwner: Wallet!
 }
 
+type Dungeon @entity {
+  id: ID!
+  size: Int!
+  layout: Bytes!
+  environment: Int!
+  numDoors: BigInt!
+  numPoints: BigInt!
+  name: String!
+  svg: String!
+  currentOwner: Wallet!
+  minted: BigInt!
+}
+
 type Wallet @entity {
   id: ID!
   address: Bytes!
@@ -121,12 +134,16 @@ type Wallet @entity {
   gAdventurersHeld: BigInt!
   items: [Item!] @derivedFrom(field: "currentOwner")
   itemsHeld: BigInt!
+  dungeons: [Dungeon!] @derivedFrom(field: "currentOwner")
+  dungeonsHeld: BigInt!
+
   joined: BigInt!
 }
 
 type Transfer @entity {
   id: ID!
   bag: Bag
+  dungeon: Dungeon
   realm: Realm
   mLoot: MLoot
   mana: Mana
