@@ -31,5 +31,9 @@
     "nftPositionsManager": {
         "address": "0xC36442b4a4522E871399CD717aBDD847Ab11FE88",
         "startBlock": 9816964
+    },
+    "cryptsAndCaverns": {
+        "address": "0xFe6C93C510d9777245C45720cE4f42EA98e7b351",
+        "startBlock": 9679234
     }
 }

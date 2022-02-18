@@ -25,6 +25,7 @@ export function isZeroAddress(string: string): boolean {
       fromWallet.manasHeld = BigInt.fromI32(0);
       fromWallet.gAdventurersHeld = BigInt.fromI32(0);
       fromWallet.bridgedRealmsHeld = BigInt.fromI32(0);
+      fromWallet.dungeonsHeld = BigInt.fromI32(0);
     }
     
     let toId = toAddress.toHex();
@@ -39,6 +40,7 @@ export function isZeroAddress(string: string): boolean {
       toWallet.manasHeld = BigInt.fromI32(0);
       toWallet.gAdventurersHeld = BigInt.fromI32(0);
       toWallet.bridgedRealmsHeld = BigInt.fromI32(0);
+      toWallet.dungeonsHeld = BigInt.fromI32(0);
 
     }
 
