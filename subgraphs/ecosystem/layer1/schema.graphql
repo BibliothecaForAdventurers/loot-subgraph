@@ -143,6 +143,7 @@ type Wallet @entity {
 type Transfer @entity {
   id: ID!
   bag: Bag
+  dungeon: Dungeon
   realm: Realm
   mLoot: MLoot
   mana: Mana
