@@ -3,12 +3,13 @@ import { Dungeon } from '../generated/schema';
 import { Transfer as TransferEvent } from '../generated/CryptsAndCaverns/Dungeons';
 import { Dungeons } from '../generated/CryptsAndCaverns/Dungeons';
 import { getTransfer, getWallets, isZeroAddress } from './utils';
+import { log } from '@graphprotocol/graph-ts';
 
 import { BigInt } from '@graphprotocol/graph-ts';
 
 export function handleTransfer(event: TransferEvent): void {
   let tokenId = event.params.tokenId;
-    let wallets = getWallets(event.params.from, event.params.to, event);
+  let wallets = getWallets(event.params.from, event.params.to, event);
 
 
   if(!isZeroAddress(wallets.fromWallet.id)) {
@@ -29,10 +30,29 @@ export function handleTransfer(event: TransferEvent): void {
       dungeon.size = contract.getSize(tokenId);
       dungeon.layout = contract.getLayout(tokenId);
       dungeon.environment = contract.getEnvironment(tokenId);
-      dungeon.numDoors = contract.getNumDoors(tokenId);
-      dungeon.numPoints = contract.getNumPoints(tokenId);
       dungeon.name = contract.getName(tokenId);
-      dungeon.svg = contract.getSvg(tokenId);
+
+      let numDoorsResult = contract.try_getNumDoors(tokenId)
+      if (numDoorsResult.reverted) {
+        log.info('numDoors reverted', [])
+      } else {
+        dungeon.numDoors = numDoorsResult.value
+      }
+
+      let numPointsResult = contract.try_getNumPoints(tokenId)
+      if (numPointsResult.reverted) {
+        log.info('numPoints reverted', [])
+      } else {
+        dungeon.numPoints = numPointsResult.value
+      }
+
+      let svgResult = contract.try_getSvg(tokenId)
+      if (svgResult.reverted) {
+        log.info('Svg reverted', [])
+      } else {
+        dungeon.svg = svgResult.value
+      }
+      
       dungeon.currentOwner = wallets.toWallet.id;
       dungeon.minted = event.block.timestamp;
       dungeon.save(); 
