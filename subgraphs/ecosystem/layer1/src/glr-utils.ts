@@ -1,5 +1,5 @@
 import { BigInt, ByteArray, crypto } from "@graphprotocol/graph-ts";
-import { Bag, GAdventurer } from "../generated/schema";
+import { GAdventurer } from "../generated/schema";
 
 const ITEMS = [
   // WEAPONS
@@ -272,10 +272,10 @@ export function getGreatnessByItem(
   return getGreatnessByType(lootTokenId.toString(), ITEMS_PREFIXES[itemType]);
 }
 
-export function getBagGreatness(bag: Bag): i32 {
+export function getBagGreatness(tokenId: BigInt): i32 {
   let greatness = 0;
   for (let i = 0; i < 8; i++) {
-    greatness += getGreatnessByItem(BigInt.fromString(bag.id), i);
+    greatness += getGreatnessByItem(tokenId, i);
   }
   return greatness;
 }
@@ -297,17 +297,12 @@ export function getGAdventurerGreatness(bag: GAdventurer): i32 {
   return greatness;
 }
 
-export function getBagLevel(bag: Bag): i32 {
+export function getBagLevel(tokenId: BigInt, items: string[]): i32 {
   let level = 0;
-  const lootId = BigInt.fromString(bag.id);
-  level += getItemLevel(lootId, 0, bag.weapon);
-  level += getItemLevel(lootId, 1, bag.chest);
-  level += getItemLevel(lootId, 2, bag.head);
-  level += getItemLevel(lootId, 3, bag.waist);
-  level += getItemLevel(lootId, 4, bag.foot);
-  level += getItemLevel(lootId, 5, bag.hand);
-  level += getItemLevel(lootId, 6, bag.neck);
-  level += getItemLevel(lootId, 7, bag.ring);
+
+  for (let i = 0; i < 8; i++) {
+    level += getItemLevel(tokenId, i, items[i]);
+  }
   return level;
 }
 
@@ -331,20 +326,12 @@ export function getGAdventurerLevel(bag: GAdventurer): i32 {
   return level;
 }
 
-export function getBagRating(bag: Bag): i32 {
-  const tokenId = BigInt.fromString(bag.id);
+export function getBagRating(tokenId: BigInt, items: string[]): i32 {
   let rating = 0;
-  rating +=
-    getItemLevel(tokenId, 0, bag.weapon) * getGreatnessByItem(tokenId, 0);
-  rating +=
-    getItemLevel(tokenId, 1, bag.chest) * getGreatnessByItem(tokenId, 1);
-  rating += getItemLevel(tokenId, 2, bag.head) * getGreatnessByItem(tokenId, 2);
-  rating +=
-    getItemLevel(tokenId, 3, bag.waist) * getGreatnessByItem(tokenId, 3);
-  rating += getItemLevel(tokenId, 4, bag.foot) * getGreatnessByItem(tokenId, 4);
-  rating += getItemLevel(tokenId, 5, bag.hand) * getGreatnessByItem(tokenId, 5);
-  rating += getItemLevel(tokenId, 6, bag.neck) * getGreatnessByItem(tokenId, 6);
-  rating += getItemLevel(tokenId, 7, bag.ring) * getGreatnessByItem(tokenId, 7);
+  for (let i = 0; i < 8; i++) {
+    rating +=
+      getItemLevel(tokenId, i, items[i]) * getGreatnessByItem(tokenId, i);
+  }
   return rating;
 }
 

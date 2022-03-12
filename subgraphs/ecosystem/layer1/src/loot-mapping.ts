@@ -4,6 +4,7 @@ import { getTransfer, getWallets, isZeroAddress } from './utils';
 import { Bag } from '../generated/schema';
 import { Loot } from '../generated/Loot/Loot';
 import { BigInt } from '@graphprotocol/graph-ts';
+import { getBagGreatness, getBagLevel, getBagRating } from './glr-utils';
 
 export function handleTransfer(event: TransferEvent): void {
   let tokenId = event.params.tokenId;
@@ -90,9 +91,15 @@ export function handleTransfer(event: TransferEvent): void {
     bag.currentOwner = wallets.toWallet.id;
     bag.minted = event.block.timestamp;
     bag.manasClaimed = BigInt.fromI32(0);
+    
+    const items = [bag.weapon, bag.chest, bag.head, bag.waist, bag.foot, bag.hand, bag.neck, bag.ring];
+    bag.bagGreatness = getBagGreatness(tokenId);
+    bag.bagLevel = getBagLevel(tokenId, items);
+    bag.bagRating = getBagRating(tokenId, items);
+
     bag.save();
   }
-
+  
   let transfer = getTransfer(event, wallets)
   transfer.bag = tokenId.toString();
   transfer.save()
