@@ -58,6 +58,11 @@ type GAdventurer @entity {
   order: String!
   orderColor: String!
   orderCount: String!
+  bagGreatness: Int!
+  bagLevel: Int!
+  bagRating: Int!
+  lootTokenIds: [Int!]
+  tokenURI: String!
   currentOwner: Wallet!
   minted: BigInt!
 }

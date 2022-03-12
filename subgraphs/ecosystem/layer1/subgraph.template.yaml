@@ -85,11 +85,14 @@ dataSources:
       entities:
         - Transfer
         - Mana
+        - GAdventurer
         - Wallet
         - Bag
       abis:
         - name: GenesisMana
           file: ./abis/GenesisMana.json
+        - name: GenesisAdventurer
+          file: ./abis/GenesisAdventurer.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
@@ -117,6 +120,10 @@ dataSources:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
+        - event: NameLostMana(uint256,(uint256,uint8)[])
+          handler: handleNameLostMana
+        - event: NameAdventurer(uint256,string)
+          handler: handleNameAdventurer
       file: ./src/gadventurer-mapping.ts
 
   - kind: ethereum/contract
