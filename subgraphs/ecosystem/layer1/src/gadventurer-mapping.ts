@@ -14,7 +14,7 @@ import {
   getGAdventurerRating
 } from "./glr-utils";
 
-const V3_CONTRACT_START_TOKEN_ID = BigInt.fromI32(480);
+const V3_CONTRACT_START_TOKEN_ID = BigInt.fromI32(500);
 
 export function handleTransfer(event: TransferEvent): void {
   let tokenId = event.params.tokenId;
@@ -58,6 +58,8 @@ export function handleTransfer(event: TransferEvent): void {
   let transfer = getTransfer(event, wallets);
   transfer.gAdventurer = tokenId.toString();
   transfer.save();
+
+  
 }
 
 export function handleResurrectGA(call: ResurrectGACall): void {
@@ -97,10 +99,8 @@ function refreshAdventurersBeforeTokenId(
   tokenId: BigInt,
   contractAddress: Address
 ): void {
-  if (tokenId.lt(BigInt.fromI32(1))) {
-    return;
-  }
-  for (let i = tokenId.toI32() - 1; i > 0; i--) {
+  const start = tokenId.toI32() - 1;
+  for (let i = start; i > 0; i--) {
     refreshGAdventurerByTokenId(BigInt.fromI32(i), contractAddress);
   }
 }

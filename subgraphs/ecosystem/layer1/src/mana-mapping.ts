@@ -5,6 +5,8 @@ import { Address, BigInt } from "@graphprotocol/graph-ts";
 import { updateGAdventurerWithLootTokenIds } from "./gadventurer-mapping";
 import { GenesisAdventurer } from "../generated/GenesisProjectAdventurer/GenesisAdventurer";
 
+const GENESIS_ADVENTURER_CONTRACT = "0x8db687aceb92c66f013e1d614137238cc698fedb";
+
 export function handleTransfer(event: TransferEvent): void {
   let tokenId = event.params.tokenId;
   let wallets = getWallets(event.params.from, event.params.to, event);
@@ -51,18 +53,17 @@ export function handleTransfer(event: TransferEvent): void {
   transfer.mana = tokenId.toString();
   transfer.save();
 
-  updateGAdventurerIfSummoned(event);
+  // If GA summoning, last transfer will be the ring
+  if (mana.inventoryId == 7) {
+    updateGAdventurerIfSummoned(event);
+  }
+  
 }
 
 function updateGAdventurerIfSummoned(event: TransferEvent): void {
-  // If GA summoning, last transfer will be the ring at logIndex 16
-  if (event.logIndex.toString() != "16") {
-    return;
-  }
-
   // GAdventurer is the first transfer in transaction
   const transaction = event.transaction.hash.toHex();
-  const gaTransfer = Transfer.load(transaction + "-0");
+  const gaTransfer = Transfer.load(getTransferId(transaction, event, 16));
 
   if (gaTransfer == null || gaTransfer.gAdventurer == null) {
     return;
@@ -73,19 +74,28 @@ function updateGAdventurerIfSummoned(event: TransferEvent): void {
   if (gAdventurer == null) {
     return;
   }
+  const weaponTransferId = getTransferId(transaction, event, 14);
+  const chestTransferId = getTransferId(transaction, event, 12);
+  const headTransferId = getTransferId(transaction, event, 10);
+  const waistTransferId = getTransferId(transaction, event, 8);
+  const footTransferId = getTransferId(transaction, event, 6);
+  const handTransferId = getTransferId(transaction, event, 4);
+  const neckTransferId = getTransferId(transaction, event, 2);
+  const ringTransferId = getTransferId(transaction, event, 0);
+
   updateGAdventurerWithLootTokenIds(
     gAdventurer as GAdventurer,
     [
-      getLootIdByManaTransferId(transaction + "-2"), // Weapon
-      getLootIdByManaTransferId(transaction + "-4"), // Chest
-      getLootIdByManaTransferId(transaction + "-6"), // Head
-      getLootIdByManaTransferId(transaction + "-8"), // Waist
-      getLootIdByManaTransferId(transaction + "-10"), // Foot
-      getLootIdByManaTransferId(transaction + "-12"), // Hand
-      getLootIdByManaTransferId(transaction + "-14"), // Neck
-      getLootIdByManaTransferId(transaction + "-16") // Ring
+      getLootIdByManaTransferId(weaponTransferId),
+      getLootIdByManaTransferId(chestTransferId),
+      getLootIdByManaTransferId(headTransferId),
+      getLootIdByManaTransferId(waistTransferId),
+      getLootIdByManaTransferId(footTransferId),
+      getLootIdByManaTransferId(handTransferId),
+      getLootIdByManaTransferId(neckTransferId),
+      getLootIdByManaTransferId(ringTransferId)
     ],
-    GenesisAdventurer.bind(event.transaction.to as Address)
+    GenesisAdventurer.bind(Address.fromString(GENESIS_ADVENTURER_CONTRACT))
   );
   gAdventurer.save();
 }
@@ -100,4 +110,14 @@ function getLootIdByManaTransferId(transferId: string): BigInt {
     return BigInt.fromI32(0);
   }
   return BigInt.fromString(mana.lootTokenId);
+}
+
+function getTransferId(
+  transaction: string,
+  event: TransferEvent,
+  minus: i32
+): string {
+  return (
+    transaction + "-" + event.logIndex.minus(BigInt.fromI32(minus)).toString()
+  );
 }
