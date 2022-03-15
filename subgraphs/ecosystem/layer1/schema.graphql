@@ -38,6 +38,9 @@ type Bag @entity {
   ringSuffixId: Int!
   waistSuffixId: Int!
   weaponSuffixId: Int!
+  bagGreatness: Int!
+  bagLevel: Int!
+  bagRating: Int!
   currentOwner: Wallet!
   minted: BigInt!
   manas: [Mana!]! @derivedFrom(field: "lootTokenId")
@@ -58,6 +61,11 @@ type GAdventurer @entity {
   order: String!
   orderColor: String!
   orderCount: String!
+  bagGreatness: Int!
+  bagLevel: Int!
+  bagRating: Int!
+  lootTokenIds: [Int!]
+  tokenURI: String!
   currentOwner: Wallet!
   minted: BigInt!
 }
@@ -72,6 +80,9 @@ type MLoot @entity {
   ring: String!
   waist: String!
   weapon: String!
+  bagGreatness: Int!
+  bagLevel: Int!
+  bagRating: Int!
   currentOwner: Wallet!
   minted: BigInt!
 }

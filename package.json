@@ -15,8 +15,8 @@
         "prepare:arbitrum-rinkeby": "yarn workspaces run prepare:arbitrum-rinkeby"
     },
     "devDependencies": {
-        "@graphprotocol/graph-cli": "^0.23.0",
-        "@graphprotocol/graph-ts": "^0.23.1",
+        "@graphprotocol/graph-cli": "0.26.0",
+        "@graphprotocol/graph-ts": "0.26.0",
         "mustache": "^4.2.0"
     }
 }
