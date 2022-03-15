@@ -6,16 +6,16 @@ import { LootRealm} from '../generated/LootRealm/LootRealm';
 
 import { Address, log, BigDecimal, BigInt, Bytes, ipfs, json, JSONValue, TypedMap, JSONValueKind } from '@graphprotocol/graph-ts';
 
-const journeyAddress = "0x8ff4549cb610755507732ea88b9413b625c55b7c"
+const journeyAddress = "0x17963290db8c30552d0cfa2a6453ff20a28c31a2"
+const carrackAddress = "0xcdfe3d7ebfa793675426f150e928cd395469ca53"
 
 export function handleTransfer(event: TransferEvent): void {
   let tokenId = event.params.tokenId;
   let wallets = getWallets(event.params.from, event.params.to, event);
-  log.info("starting realm {}", [tokenId.toString()]);
+  log.info("starting realms {}", [tokenId.toString()]);
 
   if(!isZeroAddress(wallets.fromWallet.id)) {
     wallets.fromWallet.realmsHeld = wallets.fromWallet.realmsHeld.minus(BigInt.fromI32(1))
-
   }
 
   wallets.toWallet.realmsHeld = wallets.toWallet.realmsHeld.plus(BigInt.fromI32(1));
@@ -23,37 +23,47 @@ export function handleTransfer(event: TransferEvent): void {
   let realm = Realm.load(tokenId.toString());
 
   if (realm != null) {
-    log.error('realm not null {}', [tokenId.toString()])
+    log.error('realm test not null {}', [tokenId.toString()])
     realm.currentOwner = wallets.toWallet.id;
     if(event.params.from.toHexString() == journeyAddress) {
       wallets.toWallet.bridgedRealmsHeld = wallets.toWallet.bridgedRealmsHeld.minus(BigInt.fromI32(1))
       realm.bridgedOwner = null
     }
+    if(event.params.from.toHexString() == carrackAddress) {
+      wallets.toWallet.bridgedV2RealmsHeld = wallets.toWallet.bridgedV2RealmsHeld.minus(BigInt.fromI32(1))
+      realm.bridgedV2Owner = null
+    }
     if(event.params.to.toHexString() == journeyAddress) {
-      log.error('journey address to {}', [realm.id])
       wallets.fromWallet.bridgedRealmsHeld = wallets.fromWallet.bridgedRealmsHeld.plus(BigInt.fromI32(1))
       realm.bridgedOwner = wallets.fromWallet.id
     }
+    if(event.params.to.toHexString() == carrackAddress) {
+      wallets.fromWallet.bridgedV2RealmsHeld = wallets.fromWallet.bridgedV2RealmsHeld.plus(BigInt.fromI32(1))
+      realm.bridgedV2Owner = wallets.fromWallet.id
+    }
   } else {
     realm = new Realm(tokenId.toString());
-
+    realm.tokenId = tokenId.toI32()
     let tokenrarityRank = rarityArray[tokenId.toI32() - 1]
     realm.rarityRank = BigInt.fromI32(tokenrarityRank);
     realm.currentOwner = wallets.toWallet.id;
     realm.minted = event.block.timestamp;
     realm.bridgedOwner = null
+    realm.bridgedV2Owner = null
 
     const attrs = getAttrsFromIPFS(realm);
     addAttributes(realm, attrs);
 
   }
+  wallets.fromWallet.totalRealms = wallets.fromWallet.bridgedRealmsHeld.plus(wallets.fromWallet.realmsHeld).plus(wallets.fromWallet.bridgedV2RealmsHeld)
+  wallets.toWallet.totalRealms = wallets.toWallet.bridgedRealmsHeld.plus(wallets.toWallet.realmsHeld).plus(wallets.toWallet.bridgedV2RealmsHeld)
+
   wallets.fromWallet.save()
   wallets.toWallet.save()
   realm.save();
 
   let transfer = getTransfer(event, wallets)  
   transfer.realm = tokenId.toString();
-
 
   transfer.save();
 
@@ -71,11 +81,15 @@ if (hashBytes) {
 }
 
 function setStringAttribute(realm: Realm, obj: TypedMap<string, JSONValue>, attribute: string, alias: string | null = null): void {
-  log.info("attempting to set {} on realm {}", [attribute, realm.id])
+  log.info("Setting {} on realm id {}", [attribute, realm.id])
   const val = obj.get(attribute);
   if (val) {
-    log.info("Setting {} to {} on {}", [attribute, val.toString(), realm.id])
-    realm.setString(alias ? alias : attribute, val.toString());
+    let stringVal = val.toString()
+    if (attribute == "order") {
+      stringVal = stringVal.substring(13)
+    }
+    log.info("Setting {} to {} on {}", [attribute, stringVal, realm.id])
+    realm.setString(alias ? alias : attribute, stringVal);
   }
 }
 
@@ -105,12 +119,13 @@ function getAttrsFromIPFS(realm: Realm): TypedMap<string, JSONValue> {
     assert(val.kind == JSONValueKind.OBJECT, "Chikn Attributes from IPFS was not type " + JSONValueKind.OBJECT.toString() + " (JSONValueKind.OBJECT), it was type " + val.kind.toString());
     return val.toObject();
   } else {
-    throw new Error("Chikn attributes content was null from IPFS file " + hash);
+    throw new Error("Realm attributes content was null from IPFS file " + hash);
   }
 }
 export function addAttributes(realm: Realm, attrsObj: TypedMap<string, JSONValue>): void {
   setStringAttribute(realm, attrsObj, "name");
   setStringAttribute(realm, attrsObj, "order");
+  setStringAttribute(realm, attrsObj, "wonder");
   setIntAttribute(realm, attrsObj, "regions");
   setIntAttribute(realm, attrsObj, "cities");
   setIntAttribute(realm, attrsObj, "harbours");

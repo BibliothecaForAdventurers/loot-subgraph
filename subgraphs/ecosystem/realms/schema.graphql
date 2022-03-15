@@ -39,6 +39,7 @@ type Resource @entity{
 
 type Realm @entity {
   id: ID!
+  tokenId: Int!
   currentOwner: Wallet!
   minted: BigInt!
   name: String
@@ -48,11 +49,12 @@ type Realm @entity {
   regions: Int!
   resourceIds: [Int!]!
   resources: [RealmResource!] @derivedFrom(field: "realm")
-  wonder: Int
+  wonder: String
   rarityScore: BigDecimal!
   rarityRank: BigInt!
   order: String 
   bridgedOwner: Wallet
+  bridgedV2Owner: Wallet
 }
 
 type RealmResource @entity {
@@ -67,6 +69,8 @@ type Wallet @entity {
   realms: [Realm!] @derivedFrom(field: "currentOwner")
   realmsHeld: BigInt!
   bridgedRealmsHeld: BigInt!
+  bridgedV2RealmsHeld: BigInt!
+  totalRealms: BigInt!
   joined: BigInt!
 }
 

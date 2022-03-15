@@ -26,6 +26,7 @@ export function getWallets(from: Address, to: Address, event: ethereum.Event ): 
     fromWallet = new Wallet(fromId);
     fromWallet.address = fromAddress;
     fromWallet.joined = event.block.timestamp;
+    fromWallet.totalRealms = BigInt.fromI32(0);
     fromWallet.realmsHeld = BigInt.fromI32(0);
     fromWallet.bridgedRealmsHeld = BigInt.fromI32(0);
   }
@@ -36,6 +37,7 @@ export function getWallets(from: Address, to: Address, event: ethereum.Event ): 
     toWallet = new Wallet(toId);
     toWallet.address = toAddress;
     toWallet.joined = event.block.timestamp;
+    toWallet.totalRealms = BigInt.fromI32(0);
     toWallet.realmsHeld = BigInt.fromI32(0);
     toWallet.bridgedRealmsHeld = BigInt.fromI32(0);
 

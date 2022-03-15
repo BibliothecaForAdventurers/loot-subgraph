@@ -8,7 +8,7 @@
     "remove-local": "graph remove --node http://localhost:8020/ bibliotheca-for-adventures",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 bibliotheca-for-adventures",
 
-    "deploy:rinkeby": "graph deploy --product hosted-service bibliothecaforadventurers/loot-ecosystem",
+    "deploy:rinkeby": "graph deploy --product hosted-service redbeardeth/realms-rinkeby",
     "deploy:mainnet": "graph deploy --product hosted-service bibliothecaforadventurers/realms",
     "deploy:test": "graph deploy --product hosted-service redbeardeth/lootdev",
 
