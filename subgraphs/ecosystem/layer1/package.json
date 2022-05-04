@@ -10,11 +10,11 @@
 
     "deploy:mainnet": "graph deploy --product hosted-service bibliothecaforadventurers/loot-ecosystem",
     "deploy:rinkeby": "graph deploy --product hosted-service redbeardeth/rinkeby-loot-ecosystem",
+    "deploy:goerli": "graph deploy --product hosted-service bibliothecaforadventurers/loot-ecosystem-goerli",
 
     "prepare:mainnet": "mustache ../../../config/mainnet.json subgraph.template.yaml > subgraph.yaml && mustache ../../../config/mainnet.json src/realm-mapping.template.ts > src/realm-mapping.ts",
     "prepare:rinkeby": "mustache ../../../config/rinkeby.json subgraph.template.yaml > subgraph.yaml && mustache ../../../config/rinkeby.json src/realm-mapping.template.ts > src/realm-mapping.ts",
-    "prepare:arbitrum": "yarn -v",
-    "prepare:arbitrum-rinkeby": "yarn -v"
+    "prepare:goerli": "mustache ../../../config/goerli.json subgraph.template.yaml > subgraph.yaml && mustache ../../../config/goerli.json src/realm-mapping.template.ts > src/realm-mapping.ts"
   },
   "version": "1.0.0",
   "main": "index.js",

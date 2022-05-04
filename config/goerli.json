@@ -1,0 +1,39 @@
+{
+    "network": "goerli",
+    "loot": {
+        "address": "0x3f135Fa90DC2dAc62453AA4Aa1180aA4a8977B0a",
+        "startBlock": 6810198
+    },
+    "lootRealm": {
+        "address": "0x3dC98f83a0F3Ad77D44a68C6D15e08378DE3df25",
+        "startBlock": 6810198
+    },
+    "lootMore": {
+        "address": "0x0000000000000000000000000000000000000000",
+        "startBlock": 13160010
+    },
+    "genesisMana": {
+        "address": "0x0000000000000000000000000000000000000000",
+        "startBlock": 13186741
+    },
+    "genesisAdventurer": {
+        "address": "0x0000000000000000000000000000000000000000",
+        "startBlock": 13235759
+    },
+    "journey": {
+        "address": "0x7DB8967d8311B0b384F69378399f3b2bd2392d36",
+        "startBlock": 6810198 
+    },
+    "staker": {
+        "address": "0x0000000000000000000000000000000000000000",
+        "startBlock": 9816964    
+    },
+    "nftPositionsManager": {
+        "address": "0x0000000000000000000000000000000000000000",
+        "startBlock": 9816964
+    },
+    "cryptsAndCaverns": {
+        "address": "0x55819665a67D84D5A9476B7Ee0310c205a70fE75",
+        "startBlock": 6825592
+    }
+}

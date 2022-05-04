@@ -7,11 +7,11 @@
     "create-local": "graph create --node http://localhost:8020/ bibliotheca-for-adventures",
     "remove-local": "graph remove --node http://localhost:8020/ bibliotheca-for-adventures",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 bibliotheca-for-adventures",
-
+    "deploy:goerli": "graph deploy --product hosted-service bibliothecaforadventurers/realms-goerli",
     "deploy:rinkeby": "graph deploy --product hosted-service redbeardeth/realms-rinkeby",
     "deploy:mainnet": "graph deploy --product hosted-service bibliothecaforadventurers/realms",
     "deploy:test": "graph deploy --product hosted-service redbeardeth/lootdev",
-
+    "prepare:goerli":"mustache ../../../config/goerli.json subgraph.template.yaml > subgraph.yaml",
     "prepare:rinkeby":"mustache ../../../config/rinkeby.json subgraph.template.yaml > subgraph.yaml",
     "prepare:mainnet":"mustache ../../../config/mainnet.json subgraph.template.yaml > subgraph.yaml"
   },

@@ -1,10 +1,4 @@
 
-type Realm @entity {
-  id: ID!
-  tokenURI: String
-  currentOwner: Wallet!
-  minted: BigInt!
-}
 enum RealmTraitOption {
   regions
   cities
@@ -47,6 +41,25 @@ enum Buildings {
   fishing_village
 }
 
+enum Orders {
+    Power 
+    Giants
+    Titans 
+    Skill 
+    Perfection
+    Brilliance 
+    Enlightenment 
+    Protection
+    Anger 
+    Rage 
+    Fury 
+    Vitriol
+    the_Fox 
+    Detection 
+    Reflection
+    the_Twins
+}
+
 type RealmBuilding @entity {
   id: ID!
   name: Buildings!
@@ -60,7 +73,7 @@ type RealmTrait @entity {
   name: RealmTraitOption!
   value: Int
   buildings: [RealmBuilding!]!
-  sRealm: SRealm!
+  realm: Realm!
 }
 
 type BuildingUpgrade @entity {
@@ -74,10 +87,10 @@ type Resource @entity{
   name: String
   totalRealms: Int
   stakedRealms: BigInt!
-  srealms: [RealmResource!]! @derivedFrom(field: "resource")
+  realms: [RealmResource!]! @derivedFrom(field: "resource")
 }
 
-type SRealm @entity {
+type Realm @entity {
   id: ID!
   currentOwner: Wallet!
   minted: BigInt!
@@ -86,10 +99,11 @@ type SRealm @entity {
   name: String
   traits: [RealmTrait!]
   resourceIds: [Int!]!
-  resources: [RealmResource!] @derivedFrom(field: "srealm")
+  resources: [RealmResource!] @derivedFrom(field: "realm")
   wonder: Int
   rarityScore: BigDecimal!
-  order: Int  
+  rarityRank: BigDecimal!
+  order: Orders!  
   raidAttacks: BigInt! 
   raidDefends: BigInt!
   raiderRealmResults: [RaidResult!] @derivedFrom(field: "raiderRealm")
@@ -98,7 +112,7 @@ type SRealm @entity {
 
 type RealmResource @entity {
   id: ID!
-  srealm: SRealm!
+  realm: Realm!
   resource: Resource!
   level: BigInt!
   resourceUpgrades: [ResourceUpgrade!] @derivedFrom(field: "realmResourceUpgraded")
@@ -115,8 +129,8 @@ type RaidResult @entity {
   result: BigInt
   raider: Wallet!
   defender: Wallet!
-  raiderRealm: SRealm
-  defenderRealm: SRealm
+  raiderRealm: Realm
+  defenderRealm: Realm
   raiderUnitsLost: BigInt
   defenderUnitsLost: BigInt
   resourcesPillaged: [Resource!]
@@ -131,8 +145,6 @@ type Wallet @entity {
   address: Bytes!
   realms: [Realm!] @derivedFrom(field: "currentOwner")
   realmsHeld: BigInt!
-  srealms: [SRealm!] @derivedFrom(field: "currentOwner")
-  srealmsHeld: BigInt! 
   raidAttacks: BigInt! 
   raidDefends: BigInt!
   raiderResults: [RaidResult!] @derivedFrom(field: "raider")
@@ -145,7 +157,6 @@ type Wallet @entity {
 type Transfer @entity {
   id: ID!
   realm: Realm
-  srealm: SRealm
   from: Wallet!
   to: Wallet!
   txHash: Bytes!
